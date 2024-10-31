@@ -1,0 +1,16 @@
+{
+    "name": "MeetEasy Devcontainer",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "remoteUser": "vscode",
+    "postCreateCommand": "cd backend && ./gradlew build",
+    "features": {
+        "java": "17"
+    },
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ]
+
+}
