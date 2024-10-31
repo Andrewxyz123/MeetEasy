@@ -1,5 +1,4 @@
-
-# Team Setup Guide for PostgreSQL and Docker Network
+Setup Guide for PostgreSQL and Docker Network
 
 1. **Create the Docker Network** (if it doesn’t already exist):
    ```
