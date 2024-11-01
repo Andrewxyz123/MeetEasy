@@ -6,32 +6,27 @@ RUN git clone https://github.com/flutter/flutter.git /opt/flutter && \
     chown -R vscode:vscode /opt/flutter
 ENV PATH="/opt/flutter/bin:/opt/flutter/bin/cache/dart-sdk/bin:${PATH}"
 
-# Install PostgreSQL client
+# Install PostgreSQL client, PostgreSQL server, and Maven
 RUN apt-get update && \
-    apt-get install -y postgresql-client && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install PostgreSQL server
-RUN apt-get update && \
-    apt-get install -y postgresql && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install Maven
-RUN apt-get update && \
-    apt-get install -y maven && \
+    apt-get install -y \
+    postgresql-client \
+    postgresql \
+    maven \
+    curl \
+    apt-transport-https \
+    ca-certificates \
+    software-properties-common && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Docker CLI
-RUN apt-get update && \
-    apt-get install -y docker.io && \
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
-
-
-# Install any additional packages you need (e.g., Android Studio, Swagger)
-# Note: Android Studio installation is complex and usually done via the SDK, not directly in the container.
+# Install Docker Compose v2
+RUN curl -L "https://github.com/docker/compose/releases/download/v2.1.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose

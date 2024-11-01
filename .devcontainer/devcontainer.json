@@ -5,7 +5,7 @@
         "context": ".."
     },
     "remoteUser": "vscode",
-    "postCreateCommand": "cd backend && ./gradlew build",
+    "postCreateCommand": "",
     "features": {
         "java": "17"
     },

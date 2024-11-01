@@ -1,0 +1,3 @@
+sudo docker cp /workspaces/MeetEasy/init_database.sql meeteasy-postgres-1:/init_database.sql
+
+sudo docker exec -i meeteasy-postgres-1 psql -U davenicholasandrew -d davenicholasandrew -f /init_database.sql
