@@ -1,0 +1,55 @@
+1. Install Required Software
+   - Visual Studio Code (VS Code): Ensure they have the latest version of VS Code installed.
+   - Docker: Install Docker Desktop (make sure it’s running).
+
+2. Install VS Code Extensions
+   - Open VS Code and navigate to the Extensions view by clicking on the Extensions icon in the Activity Bar or pressing Ctrl+Shift+X.
+   - Search for and install the following extensions:
+     - Remote - Containers: This extension allows the use of Docker containers as development environments.
+     - Java Extension Pack: This is necessary for Java development, including Spring Boot.
+
+3. Clone the Repository
+   - Open a terminal (inside VS Code or a separate terminal) and navigate to the directory where they want to clone the project.
+   - Use the command:
+     git clone git@github.com:Nicholas2812/MeetEasy.git
+   - Navigate into the cloned directory:
+     cd MeetEasy
+
+4. Open the Project in Dev Container
+   - Press F1 (or Ctrl+Shift+P) to open the Command Palette.
+   - Type and select Remote-Containers: Open Folder in Container....
+   - Select the MeetEasy folder. VS Code will build the dev container using the devcontainer.json configuration.
+
+5. Set Up Docker Network
+   - Once inside the dev container, open a terminal in VS Code.
+   - Create a Docker network to connect both containers (if it doesn’t already exist):
+     sudo docker network create meeteasy-network
+
+6. Start PostgreSQL Database Container
+   - Start the PostgreSQL container using the command:
+     sudo docker run --name meet-easy-postgres-db --network meeteasy-network -e POSTGRES_USER=davenicholasandrew -e POSTGRES_PASSWORD=davenicholasandrew -e POSTGRES_DB=davenicholasandrew -p 5432:5432 -d postgres
+   - Verify the PostgreSQL container is running:
+     sudo docker ps
+
+7. Run the Spring Boot Application
+   - In the terminal, navigate to the backend/meet-easy directory:
+     cd backend/meet-easy
+   - Run the Spring Boot application using Maven:
+     mvn spring-boot:run
+
+8. Access Swagger UI
+   - Once the application is running, they can access Swagger UI by navigating to:
+     http://localhost:8080/swagger-ui/index.html
+
+9. Making Changes and Committing
+   - Any changes made to the project can be tracked using Git:
+     - Use git status to see changes.
+     - Use git add . to stage changes.
+     - Commit changes with:
+       git commit -m "Your commit message"
+     - Push changes to the remote repository with:
+       git push origin master
+
+10. Development Tips
+    - Remind them that after creating new files or directories, they should run git add . to include those in the next commit.
+    - Encourage them to regularly pull from the remote repository to stay updated with any changes made by others.
