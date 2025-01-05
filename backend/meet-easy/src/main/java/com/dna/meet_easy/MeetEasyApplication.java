@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MeetEasyApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(MeetEasyApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(MeetEasyApplication.class, args);
+    }
 }
