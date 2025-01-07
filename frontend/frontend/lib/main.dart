@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/login_page.dart';
+import 'pages/home_page.dart'; // Import the home page
 
 void main() {
   runApp(const MyApp());
@@ -41,7 +42,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: LoginPage(),
+      initialRoute: '/home', // Start with the login page
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/home': (context) => const HomePage(),
+      },
     );
   }
 }

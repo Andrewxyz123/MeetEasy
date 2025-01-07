@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../controllers/loginController.dart';
 
 class LoginPage extends StatelessWidget {
+  // const LoginPage({super.key});
   // text field controller
   final companyIdController = TextEditingController();
   final employeeIdController = TextEditingController();
