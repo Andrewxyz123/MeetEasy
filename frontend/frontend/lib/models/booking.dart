@@ -51,12 +51,12 @@ class Booking {
   
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
         id: json["id"],
-        user_id: json["user_id"],
-        room_id: json['room_id'],
+        user_id: json["userId"],
+        room_id: json['roomId'],
         room_number: json['room_number'],
         company_branch_name: json['company_branch_name'],
-        start_time: DateTime.parse(json['start_time']),  // Parse the timestamp
-        end_time: DateTime.parse(json['end_time']), 
+        start_time: DateTime.parse(json['startTime']),  // Parse the timestamp
+        end_time: DateTime.parse(json['endTime']), 
         status: json['status'],
         room: json['room']
   );

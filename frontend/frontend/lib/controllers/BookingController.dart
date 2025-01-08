@@ -41,7 +41,7 @@ class BookingController extends GetxController {
         print(json.decode(response.body));
       }
     } catch (e) {
-      // print('test');
+      print('test');
       print(e.toString());
     }
   }
