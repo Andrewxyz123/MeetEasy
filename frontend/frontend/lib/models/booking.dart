@@ -25,14 +25,22 @@ class Booking {
   int? id;
   int? user_id;
   int? room_id;
+  String? room_number;
+  String? company_branch_name;
   DateTime? start_time; 
   DateTime? end_time;
   String? status;
+
+  //Need Room Number from Room
+  
+  //Need Company Branch Name
 
   Booking({
     this.id,
     this.user_id,
     this.room_id,
+    this.room_number,
+    this.company_branch_name,
     this.start_time,
     this.end_time,
     this.status
@@ -42,6 +50,8 @@ class Booking {
         id: json["id"],
         user_id: json["user_id"],
         room_id: json['room_id'],
+        room_number: json['room_number'],
+        company_branch_name: json['company_branch_name'],
         start_time: DateTime.parse(json['start_time']),  // Parse the timestamp
         end_time: DateTime.parse(json['end_time']), 
         status: json['status'],
@@ -52,6 +62,8 @@ class Booking {
       'id': id,
       'user_id': user_id,
       'room_id': room_id,
+      'room_number': room_number,
+      'company_branch_name': company_branch_name,
       'start_time': start_time?.toIso8601String(),
       'end_time': end_time?.toIso8601String(),
       'status': status,

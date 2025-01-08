@@ -3,91 +3,65 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/booking.dart';
+import 'package:frontend/models/room.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class BookingController extends GetxController {
 
-  Rx<List<Booking>> bookings = Rx<List<Booking>>([]);
+  // Rx<List<Booking>> bookings = Rx<List<Booking>>([]);
   final isLoading = false.obs;
   final box = GetStorage();
 
-  Rx<List<Booking>> userBookings = Rx<List<Booking>>([]);
+  List<Booking?> userBookings = [];
 
   @override
   void onInit() {
-    getAllPosts();
-    getAllUserPosts();
+    // getAllBookings();
     // TaleController().getAllTags();
     super.onInit();
   }
 
-  Future getAllPosts() async {
+  Future getAllBookings() async {
     try {
-      bookings.value.clear();
-      isLoading.value = true;
-      var response = await http.post(Uri.parse(bookingURL), headers: {
+      userBookings = [];
+      var response = await http.get(Uri.parse('${url}/bookings'), headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${box.read('token')}',
       });
       if (response.statusCode == 200) {
-        isLoading.value = false;
-        final content = json.decode(response.body)['reels'];
-        for (var item in content) {
-          bookings.value.add(Booking.fromJson(item));
-          // print('test1');
-        }
+        final content = json.decode(response.body);
+        userBookings.addAll(
+          (content as List).map((item) => Booking.fromJson(item)).toList(),
+        );
+        print('hello');
       } else {
-        // print('test2');
-        isLoading.value = false;
+        // print('test');
         print(json.decode(response.body));
       }
     } catch (e) {
-      // print('test3');
-      isLoading.value = false;
+      // print('test');
       print(e.toString());
     }
   }
 
-  Future getAllUserPosts() async {
-    try {
-      userBookings.value.clear();
-      isLoading.value = true;
-      var response = await http.post(Uri.parse('${url}my-story-reel'), headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${box.read('token')}',
-      });
-      if (response.statusCode == 200) {
-        isLoading.value = false;
-        final content = json.decode(response.body)['reels'];
-        for (var item in content) {
-          userBookings.value.add(Booking.fromJson(item));
-        }
-      } else {
-        isLoading.value = false;
-        print(json.decode(response.body));
-      }
-    } catch (e) {
-      isLoading.value = false;
-      print(e.toString());
-    }
-  }
-
-  Future createReels({
-    required String title,
-    required String content,
+  Future createBooking({
+    required Room? room,
+    required DateTime? start_time,
+    required DateTime? end_time,
+    // required String description
   }) async {
     try {
       var data = {
-        'title': title,
-        'content': content,
+        'start_time': start_time,
+        'end_time': end_time,
       };
       
       print(data);
 
       var response = await http.post(
-        Uri.parse('${bookingURL}/createStoryReel'),
+        Uri.parse('${roomURL}/createBooking'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',

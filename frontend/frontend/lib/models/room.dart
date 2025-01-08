@@ -28,8 +28,8 @@ class Room {
     return Room(
       id: json["id"],
       branch_id: json["branch_id"],
-      room_number: json["room_number"],
-      room_type: json["room_type"],
+      room_number: json["roomNumber"],
+      room_type: json["roomType"],
       description: json["description"],
       capacity: json["capacity"],
       status: json["status"],
@@ -42,8 +42,8 @@ class Room {
     return {
       'id': id,
       'branch_id': branch_id,
-      'room_number': room_number,
-      'room_type': room_type,
+      'roomNumber': room_number,
+      'roomType': room_type,
       'description': description,
       'capacity': capacity,
       'status': status,

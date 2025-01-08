@@ -1,73 +1,169 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/BookingController.dart';
+import 'package:frontend/controllers/RoomController.dart';
+import 'package:frontend/models/room.dart';
+import 'package:get/get.dart';
 
-class CreateBookingScreen extends StatefulWidget {
+class CreateBookingPage extends StatefulWidget {
   @override
-  _CreateBookingScreenState createState() => _CreateBookingScreenState();
+  _CreateBookingPageState createState() => _CreateBookingPageState();
 }
 
-class _CreateBookingScreenState extends State<CreateBookingScreen> {
+class _CreateBookingPageState extends State<CreateBookingPage> {
   final _formKey = GlobalKey<FormState>();
-  String? _selectedRoom;
+  Room? _selectedRoom;
+
   DateTime? _selectedDate;
+  final TextEditingController _dateController = TextEditingController();
+  
   TimeOfDay? _selectedStartTime;
   TimeOfDay? _selectedEndTime;
+  final TextEditingController _startTimeController = TextEditingController();
+  final TextEditingController _endTimeController = TextEditingController();
+
+  RoomController _RoomController = Get.put(RoomController());
+  BookingController _BookingController = Get.put(BookingController());
+
   String? _description;
+  final TextEditingController _descriptionController = TextEditingController();
+
   bool _isSlotAvailable = true;
 
   final List<String> rooms = ["Conference Room A", "Conference Room B", "Conference Room C"];
 
+  bool isLoading = true;
+
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 365)),
     );
-    if (picked != null && picked != _selectedDate) {
+
+    if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
-        _selectedDate = picked;
+        _selectedDate = pickedDate;
+        _dateController.text =
+            '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}';
       });
     }
   }
 
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
-    final TimeOfDay? picked = await showTimePicker(
+    final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    if (picked != null) {
+
+     if (pickedTime != null) {
       setState(() {
         if (isStartTime) {
-          _selectedStartTime = picked;
+          _selectedStartTime = pickedTime;
+          _startTimeController.text = _selectedStartTime!.format(context);
         } else {
-          _selectedEndTime = picked;
+          _selectedEndTime = pickedTime;
+          _endTimeController.text = _selectedEndTime!.format(context);
         }
       });
     }
+  }
+
+  DateTime _combineDateAndTime(DateTime date, TimeOfDay time) {
+    // Combine DateTime with TimeOfDay
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
   void _saveBooking() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
+      DateTime? startDateTime = _selectedDate != null && _selectedStartTime != null
+        ? _combineDateAndTime(_selectedDate!, _selectedStartTime!)
+        : null;
+
+      DateTime? endDateTime = _selectedDate != null && _selectedEndTime != null
+        ? _combineDateAndTime(_selectedDate!, _selectedEndTime!)
+        : null;
+
+      // print('Start DateTime: $startDateTime');
+      // print('End DateTime: $endDateTime');
+      
+      bool isCreated = false;
+
+      try {
+        _BookingController.createBooking(room: _selectedRoom, start_time: startDateTime, end_time: endDateTime);
+        bool isCreated = true;
+      } catch (e) {
+        print('error in creating Booking');
+      }
+
       // Mock validation for time slot availability
       setState(() {
-        _isSlotAvailable = _selectedRoom != "Conference Room A" ||
-            _selectedDate != DateTime(2023, 11, 15) ||
-            _selectedStartTime != TimeOfDay(hour: 9, minute: 0);
+        // _isSlotAvailable = _selectedRoom != "Conference Room A" ||
+        //     _selectedDate != DateTime(2023, 11, 15) ||
+        //     _selectedStartTime != TimeOfDay(hour: 9, minute: 0);
       });
 
-      if (_isSlotAvailable) {
+      if (isCreated == true) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Booking successfully saved!')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('This time slot is already reserved. Please select another time.')),
+          SnackBar(content: Text('Error in Creating Booking.')),
         );
       }
     }
   }
+
+     Future<void> createBookingLoad() async {
+    // Start loading
+    setState(() {
+      isLoading = true;
+    });
+
+    // Perform the async operation
+    await _RoomController.getAllRooms(); // Assuming this is an async function
+
+    // Once async work is done, call setState to update the UI
+    setState(() {
+      if (_RoomController.userRooms.isEmpty) {
+        print('No rooms available');
+      } else {
+        print('Rooms fetched successfully');
+      }
+      isLoading = false; // Stop loading once data is fetched
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadRooms();  // Call the async function
+  }
+
+   Future<void> loadRooms() async {
+    // Start loading
+    setState(() {
+      isLoading = true;
+    });
+
+    // Perform the async operation
+    await _RoomController.getAllRooms(); // Assuming this is an async function
+
+    // Once async work is done, call setState to update the UI
+    setState(() {
+      if (_RoomController.userRooms.isEmpty) {
+        print('No rooms available');
+      } else {
+        print('Rooms fetched successfully');
+      }
+      isLoading = false; // Stop loading once data is fetched
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,27 +172,27 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Update Reservation',
+          'Create Booking',
           style: theme.textTheme.titleLarge, // Use the theme's title style
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(25.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DropdownButtonFormField<String>(
+              DropdownButtonFormField<Room?>(
                 value: _selectedRoom,
                 decoration: InputDecoration(
                   labelText: 'Room',
                   labelStyle: theme.textTheme.bodyLarge, // Use theme's label style
                 ),
-                items: rooms.map((room) {
-                  return DropdownMenuItem(
-                    value: room,
-                    child: Text(room, style: theme.textTheme.bodyMedium),
+                items: _RoomController.userRooms.map((room) {
+                  return DropdownMenuItem<Room?>(
+                    value: room, // The value of the dropdown item (room itself)
+                    child: Text(room?.room_number ?? 'No room number'), // Provide a default value if null
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -106,11 +202,12 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                 },
                 validator: (value) => value == null ? 'Please select a room' : null,
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 25),
               GestureDetector(
                 onTap: () => _selectDate(context),
                 child: AbsorbPointer(
                   child: TextFormField(
+                    controller: _dateController,
                     decoration: InputDecoration(
                       labelText: 'Date',
                       hintText: _selectedDate == null
@@ -122,7 +219,7 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 25),
               Row(
                 children: [
                   Expanded(
@@ -130,6 +227,7 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                       onTap: () => _selectTime(context, true),
                       child: AbsorbPointer(
                         child: TextFormField(
+                          controller: _startTimeController,
                           decoration: InputDecoration(
                             labelText: 'Start Time',
                             hintText: _selectedStartTime == null
@@ -142,12 +240,13 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 16),
+                  SizedBox(width: 25),
                   Expanded(
                     child: GestureDetector(
                       onTap: () => _selectTime(context, false),
                       child: AbsorbPointer(
                         child: TextFormField(
+                          controller: _endTimeController,
                           decoration: InputDecoration(
                             labelText: 'End Time',
                             hintText: _selectedEndTime == null
@@ -162,16 +261,18 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                  labelStyle: theme.textTheme.bodyLarge,
-                ),
-                maxLines: 3,
-                onSaved: (value) => _description = value,
-              ),
-              SizedBox(height: 16),
+              SizedBox(height: 25),
+              // TextFormField(
+              //   controller: _descriptionController,
+              //   decoration: InputDecoration(
+              //     labelText: 'Description',
+              //     labelStyle: theme.textTheme.bodyLarge,
+              //     floatingLabelBehavior: FloatingLabelBehavior.always,
+              //   ),
+              //   maxLines: 3,
+              //   onSaved: (value) => _description = value,
+              // ),
+              // SizedBox(height: 25),
               if (!_isSlotAvailable)
                 Text(
                   'This time slot is already reserved. Please select another time.',
@@ -184,7 +285,7 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                   onPressed: _saveBooking,
                   style: theme.elevatedButtonTheme.style,
                   child: Text(
-                    'Save Changes',
+                    'Create Booking',
                     style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white),
                   ),
                 ),
