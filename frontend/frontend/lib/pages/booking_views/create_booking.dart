@@ -24,9 +24,6 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
   RoomController _RoomController = Get.put(RoomController());
   BookingController _BookingController = Get.put(BookingController());
 
-  String? _description;
-  final TextEditingController _descriptionController = TextEditingController();
-
   bool _isSlotAvailable = true;
 
   final List<String> rooms = ["Conference Room A", "Conference Room B", "Conference Room C"];

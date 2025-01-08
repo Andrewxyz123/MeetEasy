@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CreateRoomScreen extends StatelessWidget {
+class CreateRoomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context); // Access the theme

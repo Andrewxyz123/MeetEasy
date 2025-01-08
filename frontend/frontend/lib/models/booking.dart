@@ -12,6 +12,7 @@
 
 // import 'dart:convert';k
 
+import 'package:frontend/models/room.dart';
 import 'package:frontend/models/user.dart';
 
 import 'package:intl/intl.dart';
@@ -30,6 +31,7 @@ class Booking {
   DateTime? start_time; 
   DateTime? end_time;
   String? status;
+  Room? room;
 
   //Need Room Number from Room
   
@@ -43,7 +45,8 @@ class Booking {
     this.company_branch_name,
     this.start_time,
     this.end_time,
-    this.status
+    this.status,
+    this.room
   });
   
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
@@ -55,6 +58,7 @@ class Booking {
         start_time: DateTime.parse(json['start_time']),  // Parse the timestamp
         end_time: DateTime.parse(json['end_time']), 
         status: json['status'],
+        room: json['room']
   );
 
   Map<String, dynamic> toJson() {
@@ -67,6 +71,7 @@ class Booking {
       'start_time': start_time?.toIso8601String(),
       'end_time': end_time?.toIso8601String(),
       'status': status,
+      'room' : room
     };
   }
 

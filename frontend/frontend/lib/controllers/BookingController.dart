@@ -61,7 +61,7 @@ class BookingController extends GetxController {
       print(data);
 
       var response = await http.post(
-        Uri.parse('${roomURL}/createBooking'),
+        Uri.parse('${bookingURL}/createBooking'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
@@ -85,19 +85,22 @@ class BookingController extends GetxController {
     }
   }
 
-  Future updateReel({
-    required int reelId,
-    required String updatedTitle,
-    required String updatedContent,
+  Future updateBooking({
+    required int? bookingId,
+    required Room? selectedRoom,
+    required DateTime? startDateTime,
+    required DateTime? endDateTime,
   }) async {
     try {
       var data = {
-        'title': updatedTitle,
-        'content': updatedContent,
+        'bookingId': bookingId,
+        'room': selectedRoom,
+        'start_time': startDateTime,
+        'end_time': endDateTime,
       };
 
       var response = await http.post(
-        Uri.parse('${bookingURL}/updateStoryReel/$reelId'),
+        Uri.parse('${bookingURL}/updateBooking/$bookingId'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
@@ -121,10 +124,10 @@ class BookingController extends GetxController {
     }
   }
 
-  Future deleteReel(int reelId) async {
+  Future deleteBooking(int bookingId) async {
     try {
       var response = await http.post(
-        Uri.parse('${bookingURL}/deleteStoryReel/$reelId'),
+        Uri.parse('${bookingURL}/deleteBooking/$bookingId'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',

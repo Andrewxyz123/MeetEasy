@@ -1,5 +1,6 @@
 import 'package:frontend/models/Booking.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/booking_views/update_booking.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:frontend/controllers/BookingController.dart';
@@ -55,10 +56,16 @@ class _BookingPageState extends State<BookingPage> {
                   
                   // Format the date here
                   String formattedDate = '';
+                  String formattedStartTime = '';
+                  String formattedEndTime = '';
                   if (booking?.start_time != null) {
                     formattedDate = DateFormat('yyyy-MM-dd').format(booking!.start_time!);
+                    formattedStartTime = DateFormat('HH:mm').format(booking.start_time!);
+                    formattedEndTime = DateFormat('HH:mm').format(booking.end_time!);
                   } else {
                     formattedDate = 'Invalid date';
+                    formattedStartTime = 'XX';
+                    formattedEndTime = 'XX';
                   }
                   
                   return Container(
@@ -92,7 +99,7 @@ class _BookingPageState extends State<BookingPage> {
                           ),
                           // Time Range (Start Time - End Time)
                           Text(
-                            'Time: ${DateFormat('HH:mm').format(booking.start_time!)} - ${DateFormat('HH:mm').format(booking.end_time!)}',
+                            'Time: $formattedStartTime - $formattedEndTime',
                             style: GoogleFonts.poppins(),
                           ),
                           // const SizedBox(height: 10),
@@ -107,7 +114,18 @@ class _BookingPageState extends State<BookingPage> {
                               IconButton(
                                 onPressed: () {
                                   // Simulate editing booking 
-                                  
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UpdateBookingPage(
+                                        bookingId: booking.id,
+                                        selectedRoom: booking.room,
+                                        start_time: booking.start_time,
+                                        end_time: booking.end_time,
+                                      ),
+                                      
+                                    ),
+                                  );
                                 },
                                 icon: const Icon(Icons.edit),
                               ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/booking_page.dart';
 import 'pages/login_page.dart';
 import 'pages/home_page.dart'; // Import the home page
-import 'pages/create_booking.dart';
+import 'pages/booking_views/create_booking.dart';
+import 'pages/create_room.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/home': (context) => const HomePage(),
         '/create-booking': (context) => CreateBookingPage(),
+        '/create-room': (context) => CreateRoomPage(),
         '/booking-list': (context) => BookingPage(),
       },
     );
