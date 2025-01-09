@@ -151,4 +151,39 @@ class BookingController extends GetxController {
     }
   }
 
+  Future updateBookingStatus({
+    required int? bookingId,
+    required String? status
+  }) async {
+    try {
+      var data = {
+        'bookingId': bookingId,
+        'status': status,
+      };
+
+      var response = await http.post(
+        Uri.parse('${bookingURL}/updateBooking/$bookingId'),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${box.read('token')}',
+        },
+        body: data,
+      );
+
+      if (response.statusCode == 201) {
+        onInit();
+      } else {
+        Get.snackbar(
+          'Error',
+          json.decode(response.body)['message'],
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      print('Error updating reel: $e');
+    }
+  }
+
 }

@@ -44,20 +44,24 @@ class RoomController extends GetxController {
     }
   }
 
-  Future createRooms({
-    required String title,
-    required String content,
+  Future createRoom({
+    required String? roomNumber,
+    required String? roomType,
+    required String? description,
+    required int? capacity
   }) async {
     try {
       var data = {
-        'title': title,
-        'content': content,
+        'roomNumber': roomNumber,
+        'roomType': roomType,
+        'description': description,
+        'capacity': capacity,
       };
       
       print(data);
 
       var response = await http.post(
-        Uri.parse('${roomURL}/createStoryRoom'),
+        Uri.parse('${roomURL}/createRoom'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
@@ -83,13 +87,18 @@ class RoomController extends GetxController {
 
   Future updateRoom({
     required int RoomId,
-    required String updatedTitle,
-    required String updatedContent,
+    required String roomNumber,
+    required String roomType,
+    required String description,
+    required String capacity,
   }) async {
     try {
       var data = {
-        'title': updatedTitle,
-        'content': updatedContent,
+        'roomId': RoomId,
+        'roomNumber': roomNumber,
+        'roomType': roomType,
+        'description': description,
+        'capacity': capacity,
       };
 
       var response = await http.post(

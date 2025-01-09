@@ -3,7 +3,7 @@ import 'package:frontend/pages/booking_page.dart';
 import 'pages/login_page.dart';
 import 'pages/home_page.dart'; // Import the home page
 import 'pages/booking_views/create_booking.dart';
-import 'pages/create_room.dart';
+import 'pages/room_views/create_room.dart';
 
 void main() {
   runApp(const MyApp());
