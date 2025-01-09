@@ -1,0 +1,34 @@
+# API Documentation
+
+## UserController
+- **GET** `/api/users` - Get all users
+- **GET** `/api/users/{id}` - Get user by ID
+
+## BookingController
+- **GET** `/api/bookings` - Get all bookings
+- **GET** `/api/bookings/user/{userId}` - Get bookings by user ID
+- **GET** `/api/bookings/unapproved` - Get unapproved bookings for a specific user
+- **GET** `/api/bookings/reviewed` - Get approved/rejected bookings for a specific user
+- **PUT** `/api/bookings/{bookingId}` - Update booking by ID
+- **DELETE** `/api/bookings/{bookingId}` - Delete booking by ID
+- **POST** `/api/bookings/status` - Change booking status by ID
+
+## RoomController
+- **GET** `/api/rooms` - Get all rooms
+- **DELETE** `/api/rooms/{roomId}` - Delete room by ID
+- **PUT** `/api/rooms/{roomId}` - Update room by ID
+
+## CompanyController
+- **GET** `/api/companies` - Get all companies
+
+## CompanyBranchController
+- **GET** `/api/branches` - Get all company branches
+
+## RoleController
+- **GET** `/api/roles` - Get all roles
+
+## HomeController
+- **GET** `/` - Redirect to Swagger UI
+
+## HelloController
+- **GET** `/hello` - Say hello

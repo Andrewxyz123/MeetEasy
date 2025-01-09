@@ -1,6 +1,8 @@
 package com.dna.meet_easy.repository;
 
 import com.dna.meet_easy.model.Booking;
+import com.dna.meet_easy.model.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,4 +19,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
            "(b.endTime BETWEEN :startTime AND :endTime) OR " +
            "(b.startTime <= :startTime AND b.endTime >= :endTime))")
     List<Booking> findOverlappingBookings(Long roomId, LocalDateTime startTime, LocalDateTime endTime);
+
+    List<Booking> findByStatusAndUserId(String status, Long userId);
+    List<Booking> findByStatusInAndUserId(List<String> of, Long userId);
 }

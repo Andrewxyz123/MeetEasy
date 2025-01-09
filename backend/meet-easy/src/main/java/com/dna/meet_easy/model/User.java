@@ -1,12 +1,15 @@
 package com.dna.meet_easy.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"companyloginid", "employeeid"})
 })
@@ -18,7 +21,7 @@ public class User {
     @JsonBackReference(value="company-user")
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+    private Company company; // Change this back to Company entity
 
     @Column(nullable = false)
     private String companyloginid;
