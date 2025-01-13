@@ -8,18 +8,22 @@
 //     status VARCHAR(20) DEFAULT 'active',
 //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 //     UNIQUE (companyloginid, employeeid)    
+import 'package:frontend/models/company.dart';
+
 class User {
   int? id;
   String? fullname;
   String? user_role;
   String? status;
+  Company? company;
   // String? password;
 
   User({
     this.id,
     this.fullname,
     this.user_role,
-    this.status
+    this.status,
+    this.company,
     // this.password
     // this.token
   });

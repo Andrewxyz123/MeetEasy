@@ -33,6 +33,7 @@ class LoginPage extends StatelessWidget {
               ),
               SizedBox(height: 32.0),
               TextField(
+                controller: companyIdController,
                 decoration: InputDecoration(
                   labelText: 'Company ID',
                   border: theme.inputDecorationTheme.border, // Use border style from theme
@@ -40,6 +41,7 @@ class LoginPage extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               TextField(
+                controller: employeeIdController,
                 decoration: InputDecoration(
                   labelText: 'Employee ID',
                   border: theme.inputDecorationTheme.border, // Use border style from theme
@@ -48,6 +50,7 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 16.0),
               TextField(
                 obscureText: true,
+                controller: passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: theme.inputDecorationTheme.border, // Use border style from theme
