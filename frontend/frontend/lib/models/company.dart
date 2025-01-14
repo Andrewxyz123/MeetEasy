@@ -6,7 +6,7 @@ class Company {
   String? name; // Name of the company
   String? industry; // Industry of the company
   DateTime? createdAt; // Timestamp when the company was created
-  
+
 
   // Constructor
   Company({
@@ -18,13 +18,19 @@ class Company {
 
   // Factory method to create an instance from JSON data
   factory Company.fromJson(Map<String, dynamic> json) {
+    List<int> createdAtList = List<int>.from(json['createdAt'] ?? []);
     return Company(
       id: json["id"],
       name: json["name"],
       industry: json["industry"],
-      createdAt: json["created_at"] != null
-          ? DateTime.parse(json["created_at"])
-          : null, // Parse the created_at timestamp
+      createdAt: createdAtList.isNotEmpty ? DateTime(
+        createdAtList[0], // year
+        createdAtList[1], // month
+        createdAtList[2], // day
+        createdAtList[3], // hour
+        createdAtList[4], // minute
+        createdAtList[5], // second
+      ) : null,
     );
   }
 
@@ -34,7 +40,7 @@ class Company {
       'id': id,
       'name': name,
       'industry': industry,
-      'created_at': createdAt?.toIso8601String(), // Convert DateTime to ISO string
+      'createdAt': createdAt?.toIso8601String(), // Convert DateTime to ISO string
     };
   }
 }

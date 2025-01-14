@@ -180,16 +180,16 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DropdownButtonFormField<Room?>(
+              DropdownButtonFormField<Room?>(//Updated property names to match the new model structure
                 value: _selectedRoom,
                 decoration: InputDecoration(
                   labelText: 'Room',
                   labelStyle: theme.textTheme.bodyLarge, // Use theme's label style
                 ),
                 items: _RoomController.userRooms.map((room) {
-                  return DropdownMenuItem<Room?>(
+                  return DropdownMenuItem<Room?>(//Updated property names to match the new model structure
                     value: room, // The value of the dropdown item (room itself)
-                    child: Text(room?.room_number ?? 'No room number'), // Provide a default value if null
+                    child: Text(room?.roomNumber ?? 'No room number'), // Provide a default value if null
                   );
                 }).toList(),
                 onChanged: (value) {

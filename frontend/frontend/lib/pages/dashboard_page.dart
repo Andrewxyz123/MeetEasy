@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/models/booking.dart';
 import 'package:frontend/models/company.dart';
@@ -17,7 +16,6 @@ class DashboardPage extends StatelessWidget {
     // required this.upcomingBookings,
   }) : super(key: key);
 
-  
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +121,7 @@ class DashboardPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Role: ${user.user_role}',
+                              'Role: ${user.userRole}',
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.black87,
@@ -302,7 +300,7 @@ class DashboardPage extends StatelessWidget {
                               margin: const EdgeInsets.only(bottom: 12),
                               child: ListTile(
                                 title: Text(
-                                  'Room ${booking.room_number}',
+                                  'Room ${booking.room?.roomNumber}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -313,14 +311,14 @@ class DashboardPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      booking.company_branch_name ?? '',
+                                      booking.room?.companyBranch?.name ?? '',
                                       style: const TextStyle(
                                         color: Colors.black87,
                                         fontSize: 14,
                                       ),
                                     ),
                                     Text(
-                                      '${DateFormat('MMM dd, HH:mm').format(booking.start_time!)} - ${DateFormat('HH:mm').format(booking.end_time!)}',
+                                      '${DateFormat('MMM dd, HH:mm').format(booking.startTime!)} - ${DateFormat('HH:mm').format(booking.endTime!)}',
                                       style: const TextStyle(
                                         color: Colors.black87,
                                         fontSize: 14,

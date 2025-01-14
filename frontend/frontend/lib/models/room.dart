@@ -1,43 +1,50 @@
 import 'dart:convert';
 import 'package:frontend/models/company_branch.dart';
-import 'package:intl/intl.dart';
 
 class Room {
   int? id;
-  int? branch_id;  // This corresponds to the `company_branches(id)` foreign key
-  String? room_number;  // This corresponds to the unique room number
-  String? room_type;  // E.g., conference, office
+  int? branchId;  // This corresponds to the `company_branches(id)` foreign key
+  String? roomNumber;  // This corresponds to the unique room number
+  String? roomType;  // E.g., conference, office
   String? description;
   int? capacity;  // Capacity of the room
   String? status;  // E.g., available, booked, etc.
-  CompanyBranch? company_branch;
-  // DateTime? created_at;  // Timestamp when the room was created
+  CompanyBranch? companyBranch;
+  DateTime? createdAt;
 
   // Constructor
   Room({
     this.id,
-    this.branch_id,
-    this.room_number,
-    this.room_type,
+    this.branchId,
+    this.roomNumber,
+    this.roomType,
     this.description,
     this.capacity,
     this.status,
-    this.company_branch,
-    // this.created_at,
+    this.companyBranch,
+    this.createdAt,
   });
 
   // Factory method to create an instance from JSON data
   factory Room.fromJson(Map<String, dynamic> json) {
+    List<int> createdAtList = List<int>.from(json['createdAt'] ?? []);
     return Room(
       id: json["id"],
-      branch_id: json["branch_id"],
-      room_number: json["roomNumber"],
-      room_type: json["roomType"],
+      branchId: json["branch_id"],
+      roomNumber: json["roomNumber"],
+      roomType: json["roomType"],
       description: json["description"],
       capacity: json["capacity"],
       status: json["status"],
-      company_branch: json['branch'] != null ? CompanyBranch.fromJson(json['branch']) : null, 
-      // created_at: DateTime.parse(json["created_at"]),  // Parse the created_at timestamp
+      companyBranch: json['branch'] != null ? CompanyBranch.fromJson(json['branch']) : null,
+      createdAt: createdAtList.isNotEmpty ? DateTime(
+        createdAtList[0], // year
+        createdAtList[1], // month
+        createdAtList[2], // day
+        createdAtList[3], // hour
+        createdAtList[4], // minute
+        createdAtList[5], // second
+      ) : null,
     );
   }
 
@@ -45,14 +52,14 @@ class Room {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'branch_id': branch_id,
-      'roomNumber': room_number,
-      'roomType': room_type,
+      'branch_id': branchId,
+      'roomNumber': roomNumber,
+      'roomType': roomType,
       'description': description,
       'capacity': capacity,
       'status': status,
-      'branch': company_branch
-      // 'created_at': created_at?.toIso8601String(),  // Convert DateTime to ISO string]
+      'branch': companyBranch?.toJson(),
+      'createdAt': createdAt?.toIso8601String(),
     };
   }
 }

@@ -13,32 +13,37 @@ import 'package:frontend/models/company.dart';
 class User {
   int? id;
   String? fullname;
-  String? user_role;
+  String? userRole;
   String? status;
   Company? company;
-  // String? password;
+  DateTime? createdAt;
 
   User({
     this.id,
     this.fullname,
-    this.user_role,
+    this.userRole,
     this.status,
     this.company,
-    // this.password
-    // this.token
+    this.createdAt,
   });
-
 
   // function to convert json data to user model
   factory User.fromJson(Map<String, dynamic> json){
+    List<int> createdAtList = List<int>.from(json['createdAt'] ?? []);
     return User(
       id: json['id'],
       fullname: json['fullname'],
       status: json['status'],
-      user_role: json['roleName'],
+      userRole: json['roleName'],
       company: json['company'] != null ? Company.fromJson(json['company']) : null, 
-      // password: json['password']
-      // token: json['token']
+      createdAt: createdAtList.isNotEmpty ? DateTime(
+        createdAtList[0], // year
+        createdAtList[1], // month
+        createdAtList[2], // day
+        createdAtList[3], // hour
+        createdAtList[4], // minute
+        createdAtList[5], // second
+      ) : null,
     );
   }
 
@@ -46,8 +51,8 @@ class User {
         "id": id,
         "fullname": fullname,
         "status": status,
-        "user_role": user_role,
-        "company": company,
-        // "password": password,
+        "userRole": userRole,
+        "company": company?.toJson(),
+        "createdAt": createdAt?.toIso8601String(),
       };
 }

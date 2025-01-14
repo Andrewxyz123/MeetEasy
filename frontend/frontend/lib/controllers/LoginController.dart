@@ -21,13 +21,14 @@ class LoginController {
     required String password,
     required BuildContext context,
   }) async {
-    print(company_id + employee_id + password);
-    if (company_id.isEmpty || password.isEmpty || employee_id.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter both Company ID, Employee ID and password.')),
-      );
-      return;
-    }
+    // print(company_id + employee_id + password);
+
+    // if (company_id.isEmpty || password.isEmpty || employee_id.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text('Please enter both Company ID, Employee ID and password.')),
+    //   );
+    //   return;
+    // }
 
     try {
       // Replace with your backend URL
@@ -40,14 +41,15 @@ class LoginController {
         'password': "password123"
       });
 
+      print(requestBody);
       // Send a POST request to the backend
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: requestBody,
       );
+      print(response.body);
 
-      print('Halo' + '$response.statusCode');
 
       if (response.statusCode == 200) {
         User loggedInUser = User.fromJson(jsonDecode(response.body));
@@ -55,11 +57,8 @@ class LoginController {
 
         userController.setLoggedInUser(loggedInUser);
 
-        print(loggedInUser);
 
-        List<Booking> bookingList = bookingController.fetchBookingsForLoggedInUser() as List<Booking>;
-
-        print('Tesasdast'+'$bookingList');
+        List<Booking> bookingList = await bookingController.fetchBookingsForLoggedInUser();
 
         // Login successful
         ScaffoldMessenger.of(context).showSnackBar(
