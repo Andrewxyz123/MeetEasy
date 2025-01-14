@@ -4,11 +4,12 @@ import 'package:frontend/constants/constants.dart';
 import 'package:frontend/controllers/RoomController.dart';
 import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/user.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class LoginController {
 
-  UserController userController = UserController();
+  UserController userController = Get.put(UserController());
   RoomController roomController = RoomController();
 
   Future<void> loginUser({
@@ -49,6 +50,10 @@ class LoginController {
 
       if (response.statusCode == 200) {
         User loggedInUser = User.fromJson(jsonDecode(response.body));
+
+        userController.setLoggedInUser(loggedInUser);
+
+        // print(userController.user?.fullname ?? 'BNAMANYA GAADA');
         // Login successful
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login successful! Welcome, ${loggedInUser.fullname}.')),

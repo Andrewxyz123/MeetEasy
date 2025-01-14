@@ -1,18 +1,25 @@
 package com.dna.meet_easy.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
 @Entity
-@Getter
-@Setter
+// @Getter
+// @Setter
 @Table(name = "companies")
 public class Company {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,11 +32,11 @@ public class Company {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @JsonManagedReference(value="company-branch")
+    @JsonBackReference(value = "company-branch")
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<CompanyBranch> branches;
 
-    @JsonManagedReference(value="company-user")
+    @JsonBackReference(value = "company-user")
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<User> users;
 

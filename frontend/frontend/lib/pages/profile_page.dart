@@ -12,6 +12,8 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+final UserController _userController = Get.put(UserController());
+
 class _ProfilePageState extends State<ProfilePage> {
 
   @override
@@ -19,8 +21,18 @@ class _ProfilePageState extends State<ProfilePage> {
     // String? nameValue = _userController.currentUser.value?.fullname;
 
     // String? currentUserRole = _userController.currentUser.value?.user_role;
+    final theme = Theme.of(context);
+
+    print(_userController.loggedInUser.value);
 
     return Scaffold(
+      
+      appBar: AppBar(
+        title: Text(
+          'Profile',
+          style: theme.textTheme.titleLarge, // Use the theme's title style
+        ),
+      ),
       body: Column(
         children: [
           const Expanded(flex: 2, child: _TopPortion()),
@@ -35,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Text(
                         // nameValue!,
-                        'Jake',
+                        _userController.user?.fullname ?? 'Name Not Found!',
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge
@@ -43,31 +55,31 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 16),
                       // Other profile details here
-                      ListTile(
-                        // leading: Container(
-                        //   width: 40,
-                        //   height: 40,
-                        //   decoration: BoxDecoration(
-                        //     borderRadius: BorderRadius.circular(100),
-                        //     color: Colors.blueGrey[100]
-                        //   ),
-                        //   child: ,
-                        // ),
-                        title: Text("User's Story Reel"),
-                        onTap: (){
-                          // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const UserReelScreen()));
-                        },
-                        trailing: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.blueGrey[100]
-                          ),
-                          child: const Icon(LineAwesomeIcons.angle_right_solid, size: 18, color: Colors.black),
-                        ),
-                      ),
-                      const Divider(),
+                      // ListTile(
+                      //   // leading: Container(
+                      //   //   width: 40,
+                      //   //   height: 40,
+                      //   //   decoration: BoxDecoration(
+                      //   //     borderRadius: BorderRadius.circular(100),
+                      //   //     color: Colors.blueGrey[100]
+                      //   //   ),
+                      //   //   child: ,
+                      //   // ),
+                      //   title: Text("User's Story Reel"),
+                      //   onTap: (){
+                      //     // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const UserReelScreen()));
+                      //   },
+                      //   trailing: Container(
+                      //     width: 30,
+                      //     height: 30,
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(100),
+                      //       color: Colors.blueGrey[100]
+                      //     ),
+                      //     child: const Icon(LineAwesomeIcons.angle_right_solid, size: 18, color: Colors.black),
+                      //   ),
+                      // ),
+                      // const Divider(),
                       ListTile(
                         title: Text("Edit Profile"),
                         onTap: (){

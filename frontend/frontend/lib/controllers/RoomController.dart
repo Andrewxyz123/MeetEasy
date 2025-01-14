@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/room.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -43,6 +44,61 @@ class RoomController extends GetxController {
       print(e.toString());
     }
   }
+
+  Future<void> getRoomsByUserId(int userId) async {
+    try {
+      userRooms = [];
+
+      // Construct the URL with userId
+      var response = await http.get(
+        Uri.parse('$roomURL/user/$userId'),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${box.read('token')}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final content = json.decode(response.body);
+        // Parse each room and add to the userRooms list
+        userRooms.addAll(
+          (content as List).map((item) => Room.fromJson(item)).toList(),
+        );
+      } else if (response.statusCode == 404) {
+        // Handle case when no rooms are found
+        final error = json.decode(response.body);
+        print("Error: ${error['error']}");
+      } else {
+        // Handle other errors
+        print("Error: ${response.statusCode}");
+        print(json.decode(response.body));
+      }
+    } catch (e) {
+      print("Exception: $e");
+    }
+  }
+
+  Future<void> fetchRoomsForLoggedInUser() async {
+  final userController = Get.find<UserController>();
+  final roomController = Get.find<RoomController>();
+
+  final userId = userController.user?.id;
+
+  if (userId == null) {
+    print("Error: No logged-in user.");
+    Get.snackbar(
+      'Error',
+      'No logged-in user found.',
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+    return;
+  }
+
+  // Call the method to get rooms by user ID
+  await roomController.getRoomsByUserId(userId);
+}
 
   Future createRoom({
     required String? roomNumber,

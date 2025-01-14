@@ -36,13 +36,11 @@ class BookingController extends GetxController {
         userBookings.addAll(
           (content as List).map((item) => Booking.fromJson(item)).toList(),
         );
-        print('hello');
       } else {
-        print('failed');
         print(json.decode(response.body));
       }
     } catch (e) {
-      print('test');
+
       print(e.toString());
     }
   }
@@ -52,8 +50,7 @@ class BookingController extends GetxController {
   Future createBooking({
     required Room? room,
     required DateTime? start_time,
-    required DateTime? end_time,
-    // required String description
+    required DateTime? end_time
   }) async {
     try {
       var data = {
@@ -61,7 +58,7 @@ class BookingController extends GetxController {
         'end_time': end_time,
       };
       
-      print(data);
+      // print(data);
 
       var response = await http.post(
         Uri.parse('${bookingURL}/createBooking'),

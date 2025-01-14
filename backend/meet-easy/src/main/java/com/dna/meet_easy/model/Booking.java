@@ -1,24 +1,37 @@
 package com.dna.meet_easy.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "bookings", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"room_id", "start_time", "end_time"})
 })
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference(value="user-booking")
+    // @JsonBackReference(value="user-booking")
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @JsonBackReference(value="room-booking")
+    // @JsonBackReference(value="room-booking")
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;

@@ -16,7 +16,13 @@ class UserController extends GetxController {
 
   final box = GetStorage();
 
-  final Rx<User?> currentUser = Rx<User?>(null);
+  var loggedInUser = Rxn<User>();
+
+  void setLoggedInUser(User user) {
+    loggedInUser.value = user;
+  }
+
+  User? get user => loggedInUser.value;
   
 
   Future updateUser({
@@ -28,7 +34,7 @@ class UserController extends GetxController {
       };
 
       var response = await http.post(
-        Uri.parse('${url}editUser'),
+        Uri.parse('${userURL}/editUser'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
@@ -38,7 +44,7 @@ class UserController extends GetxController {
 
       final currentUserDataTemp = json.decode(response.body)['user'];
       final User currentUserTemp = User.fromJson(currentUserDataTemp);
-      currentUser.value = currentUserTemp;
+      loggedInUser.value = currentUserTemp;
       update();
 
       if (response.statusCode == 201) {
@@ -65,7 +71,7 @@ class UserController extends GetxController {
 
   Future<bool> logout() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    currentUser.value = null;
+    loggedInUser.value = null;
     return await pref.remove('token');
   }
   

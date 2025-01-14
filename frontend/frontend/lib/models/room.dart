@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:frontend/models/company_branch.dart';
 import 'package:intl/intl.dart';
 
 class Room {
@@ -9,6 +10,7 @@ class Room {
   String? description;
   int? capacity;  // Capacity of the room
   String? status;  // E.g., available, booked, etc.
+  CompanyBranch? company_branch;
   // DateTime? created_at;  // Timestamp when the room was created
 
   // Constructor
@@ -20,6 +22,7 @@ class Room {
     this.description,
     this.capacity,
     this.status,
+    this.company_branch,
     // this.created_at,
   });
 
@@ -33,6 +36,7 @@ class Room {
       description: json["description"],
       capacity: json["capacity"],
       status: json["status"],
+      company_branch: json['branch'] != null ? CompanyBranch.fromJson(json['branch']) : null, 
       // created_at: DateTime.parse(json["created_at"]),  // Parse the created_at timestamp
     );
   }
@@ -47,6 +51,7 @@ class Room {
       'description': description,
       'capacity': capacity,
       'status': status,
+      'branch': company_branch
       // 'created_at': created_at?.toIso8601String(),  // Convert DateTime to ISO string]
     };
   }

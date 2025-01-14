@@ -6,6 +6,7 @@ class Company {
   String? name; // Name of the company
   String? industry; // Industry of the company
   DateTime? createdAt; // Timestamp when the company was created
+  
 
   // Constructor
   Company({

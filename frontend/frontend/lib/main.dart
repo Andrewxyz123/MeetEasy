@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/booking_page.dart';
+import 'package:frontend/pages/profile_page.dart';
 import 'pages/login_page.dart';
 import 'pages/home_page.dart'; // Import the home page
 import 'pages/booking_views/create_booking.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginPage(),
         '/home': (context) => const HomePage(),
+        '/profile': (context) => const ProfilePage(),
         '/create-booking': (context) => CreateBookingPage(),
         '/create-room': (context) => CreateRoomPage(),
         '/booking-list': (context) => BookingPage(),

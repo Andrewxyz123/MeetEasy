@@ -7,6 +7,7 @@ const loginURL = url + '/users/login-user';
 const registerURL = url + 'register';
 const bookingURL = url + '/bookings';
 const roomURL = url + '/rooms';
+const userURL = url + '/users';
 
 // ----- Errors -----
 const serverError = 'Server error.';

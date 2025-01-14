@@ -32,6 +32,7 @@ class Booking {
   DateTime? end_time;
   String? status;
   Room? room;
+  User? user;
 
   //Need Room Number from Room
   
@@ -46,20 +47,23 @@ class Booking {
     this.start_time,
     this.end_time,
     this.status,
-    this.room
+    this.room,
+    this.user
   });
   
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
-        id: json["id"],
-        user_id: json["userId"],
-        room_id: json['roomId'],
-        room_number: json['room_number'],
-        company_branch_name: json['company_branch_name'],
-        start_time: DateTime.parse(json['startTime']),  // Parse the timestamp
-        end_time: DateTime.parse(json['endTime']), 
-        status: json['status'],
-        room: json['room']
+  id: json["id"],
+  user_id: json["userId"],
+  room_id: json['roomId'],
+  room_number: json['roomNumber'],
+  company_branch_name: json['companyBranchName'],
+  start_time: DateTime.parse(json['startTime']),  // Parse the timestamp
+  end_time: DateTime.parse(json['endTime']), 
+  status: json['status'],
+  room: json['room'] != null ? Room.fromJson(json['room']) : null,  // Parse the Room object
+  user: json['user'] != null ? User.fromJson(json['user']) : null,    // Parse the User object
   );
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -71,7 +75,8 @@ class Booking {
       'start_time': start_time?.toIso8601String(),
       'end_time': end_time?.toIso8601String(),
       'status': status,
-      'room' : room
+      'room' : room,
+      'user' : user
     };
   }
 

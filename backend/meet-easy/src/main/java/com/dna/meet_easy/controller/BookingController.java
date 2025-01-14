@@ -1,7 +1,6 @@
 package com.dna.meet_easy.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dna.meet_easy.model.Booking;
-import com.dna.meet_easy.model.Room;
 import com.dna.meet_easy.model.User;
 import com.dna.meet_easy.repository.BookingRepository;
 import com.dna.meet_easy.repository.UserRepository;
@@ -39,20 +37,37 @@ public class BookingController {
         return bookingRepository.findAll();
     }
 
-    @Operation(summary = "Get Booking by UserId", operationId = "getBookingsByUserId")
+    // @Operation(summary = "Get Booking by UserId", operationId = "getBookingsByUserId")
+    // @GetMapping("/user/{userId}")
+    // public ResponseEntity<List<Room>> getRoomsBookedByUser(@PathVariable Long userId) {
+    //     User user = userRepository.findById(userId).orElse(null);
+    //     if (user == null) {
+    //         return ResponseEntity.notFound().build(); // 404 Not Found if user does not exist
+    //     }
+
+    //     List<Booking> bookings = bookingRepository.findByUserId(userId);
+    //     List<Room> bookedRooms = bookings.stream()
+    //                                       .map(Booking::getRoom) // Assuming Booking has a getRoom() method
+    //                                       .collect(Collectors.toList());
+
+    //     return ResponseEntity.ok(bookedRooms); // 200 OK with the list of booked rooms
+    // }
+
+    @Operation(summary = "Get Bookings by UserId", operationId = "getBookingsByUserId")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Room>> getRoomsBookedByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<Booking>> getBookingsByUserId(@PathVariable Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             return ResponseEntity.notFound().build(); // 404 Not Found if user does not exist
         }
 
         List<Booking> bookings = bookingRepository.findByUserId(userId);
-        List<Room> bookedRooms = bookings.stream()
-                                          .map(Booking::getRoom) // Assuming Booking has a getRoom() method
-                                          .collect(Collectors.toList());
 
-        return ResponseEntity.ok(bookedRooms); // 200 OK with the list of booked rooms
+        if (bookings.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 No Content if no bookings found
+        }
+
+        return ResponseEntity.ok(bookings); // 200 OK with the list of bookings
     }
 
     @Operation(summary = "Create a new booking", operationId = "createBooking")

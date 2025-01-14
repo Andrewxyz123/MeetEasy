@@ -54,8 +54,13 @@ class DashboardPage extends StatelessWidget {
                 ),
               ),
               
-              // Profile Panel
-              Container(
+              // Profile Panel (Clickable)
+              InkWell(
+                onTap: () {
+                  // Navigate to the profile page when tapped
+                  Navigator.pushNamed(context, '/profile', arguments: {'user': user});
+                },
+                child: Container(
                 height: MediaQuery.of(context).size.height * 0.15,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -142,6 +147,7 @@ class DashboardPage extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
               ),
               
               const SizedBox(height: 16),
@@ -245,15 +251,39 @@ class DashboardPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
                           'Upcoming Meetings',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Implement navigation or action here
+                                Navigator.pushNamed(context, '/booking-list');
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: const Size(50, 30),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: const Text(
+                                'View All',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF3182CE), // Blue color
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(

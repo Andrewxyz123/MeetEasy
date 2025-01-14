@@ -1,19 +1,31 @@
 package com.dna.meet_easy.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "company_branches")
 public class CompanyBranch {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference(value="company-branch")
+    @JsonBackReference(value = "company-branch")
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
@@ -31,7 +43,7 @@ public class CompanyBranch {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @JsonManagedReference(value="branch-room")
+    @JsonManagedReference(value = "branch-room")
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private List<Room> rooms;
 

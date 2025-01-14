@@ -36,6 +36,7 @@ class User {
       fullname: json['fullname'],
       status: json['status'],
       user_role: json['roleName'],
+      company: json['company'] != null ? Company.fromJson(json['company']) : null, 
       // password: json['password']
       // token: json['token']
     );
@@ -46,6 +47,7 @@ class User {
         "fullname": fullname,
         "status": status,
         "user_role": user_role,
+        "company": company,
         // "password": password,
       };
 }

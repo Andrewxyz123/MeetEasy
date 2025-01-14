@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/controllers/RoomController.dart';
+import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/room.dart';
 import 'package:get/get.dart';
 
@@ -23,10 +24,9 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
 
   RoomController _RoomController = Get.put(RoomController());
   BookingController _BookingController = Get.put(BookingController());
+  UserController _userController = Get.put(UserController());
 
   bool _isSlotAvailable = true;
-
-  final List<String> rooms = ["Conference Room A", "Conference Room B", "Conference Room C"];
 
   bool isLoading = true;
 
@@ -90,7 +90,7 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
 
       try {
         _BookingController.createBooking(room: _selectedRoom, start_time: startDateTime, end_time: endDateTime);
-        bool isCreated = true;
+        isCreated = true;
       } catch (e) {
         print('error in creating Booking');
       }
@@ -121,7 +121,7 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
     });
 
     // Perform the async operation
-    await _RoomController.getAllRooms(); // Assuming this is an async function
+    await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
 
     // Once async work is done, call setState to update the UI
     setState(() {

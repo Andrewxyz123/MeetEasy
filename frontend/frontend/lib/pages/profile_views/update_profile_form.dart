@@ -26,7 +26,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
     var size = MediaQuery.of(context).size.width;
 
-    String? nameValue = _userController.currentUser.value?.fullname;
+    String? nameValue = _userController.user!.fullname;
     // String? passwordValue = _userController.currentUser.value?.password;
 
     _nameController.text = nameValue!;
