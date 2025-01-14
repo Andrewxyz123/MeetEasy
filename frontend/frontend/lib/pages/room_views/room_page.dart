@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/room_views/room_detail.dart';
 import 'package:frontend/pages/room_views/update_room.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
@@ -96,6 +97,23 @@ class _RoomPageState extends State<RoomPage> {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.info, color: Colors.green, size: 20),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => RoomDetailPage(
+                                            roomId: room?.id,
+                                            roomNumber: room?.room_number,
+                                            roomType: room?.room_type,
+                                            description: room?.description,
+                                            capacity: room?.capacity,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                   IconButton(
                                     icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
                                     onPressed: () {

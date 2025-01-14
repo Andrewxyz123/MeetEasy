@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/Booking.dart';
+import 'package:frontend/pages/booking_views/booking_detail.dart';
 import 'package:frontend/pages/booking_views/update_booking.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
@@ -154,6 +155,22 @@ class _BookingPageState extends State<BookingPage> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.info, color: Colors.green, size: 20),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => BookingDetailPage(
+                                                  bookingId: booking.id,
+                                                  selectedRoom: booking.room,
+                                                  startTime: booking.start_time,
+                                                  endTime: booking.end_time,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                         // Edit Button
                                         IconButton(
