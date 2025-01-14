@@ -26,115 +26,128 @@ class _RoomPageState extends State<RoomPage> {
       isLoading = true;
     });
 
-    await _RoomController.getAllRooms(); // Fetch rooms using the controller
+    await _RoomController.getAllRooms();
 
     setState(() {
-      isLoading = false; // Stop loading once data is fetched
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.blueGrey[50],
+      appBar: AppBar(
+        title: Text(
+          'Rooms',
+          style: theme.textTheme.titleLarge?.copyWith(color: Colors.white),
+        ),
+        backgroundColor: Colors.blue,
+      ),
+      backgroundColor: Colors.blueGrey[50], // Match BookingPage background color
       body: Obx(() {
         return _RoomController.isLoading.value
             ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: _RoomController.userRooms.length,
-                itemBuilder: (context, index) {
-                  var room = _RoomController.userRooms[index];
-
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Room Number
-                          Text(
-                            room?.room_number ?? "Unknown Room Number",
-                            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                          ),
-                          // Room Type
-                          Text(
-                            'Type: ${room?.room_type ?? "Unknown"}',
-                            style: GoogleFonts.poppins(),
-                          ),
-                          // Room Capacity
-                          Text(
-                            'Capacity: ${room?.capacity ?? "Unknown"}',
-                            style: GoogleFonts.poppins(),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              // Edit Button
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => UpdateRoomPage(
-                                        roomId: room?.id,
-                                        roomNumber: room?.room_number,
-                                        roomType: room?.room_type,
-                                        description: room?.description,
-                                        capacity: room?.capacity,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.edit),
-                              ),
-                              // Delete Button
-                              IconButton(
-                                onPressed: () async {
-                                  bool confirmed = await showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('Confirm Delete'),
-                                      content: const Text('Are you sure you want to delete this room?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () => Navigator.pop(context, false),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () => Navigator.pop(context, true),
-                                          child: const Text('Delete'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-
-                                  if (confirmed) {
-                                    // Delete room logic here
-                                    await _RoomController.deleteRoom(room?.id);
-                                  }
-                                },
-                                icon: const Icon(Icons.delete),
-                              ),
-                            ],
+            : Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF718096).withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        itemCount: _RoomController.userRooms.length,
+                        itemBuilder: (context, index) {
+                          var room = _RoomController.userRooms[index];
+
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            child: ListTile(
+                              title: Text(
+                                room?.room_number ?? "Unknown Room",
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Type: ${room?.room_type ?? "Unknown"}',
+                                    style: GoogleFonts.poppins(fontSize: 14),
+                                  ),
+                                  Text(
+                                    'Capacity: ${room?.capacity ?? "Unknown"}',
+                                    style: GoogleFonts.poppins(fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => UpdateRoomPage(
+                                            roomId: room?.id,
+                                            roomNumber: room?.room_number,
+                                            roomType: room?.room_type,
+                                            description: room?.description,
+                                            capacity: room?.capacity,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red ,size: 20),
+                                    onPressed: () async {
+                                      bool confirmed = await showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text('Confirm Delete'),
+                                          content: const Text('Are you sure you want to delete this room?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(context, false),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(context, true),
+                                              child: const Text('Delete'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+
+                                      if (confirmed) {
+                                        await _RoomController.deleteRoom(room?.id);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  );
-                },
+                  ),
+                ],
               );
       }),
     );

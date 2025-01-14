@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/booking_page.dart';
 import 'package:frontend/pages/profile_page.dart';
+import 'package:frontend/pages/room_views/room_page.dart';
 import 'pages/login_page.dart';
-import 'pages/home_page.dart'; // Import the home page
 import 'pages/booking_views/create_booking.dart';
 import 'pages/room_views/create_room.dart';
 import 'package:frontend/pages/dashboard_page.dart';  // Add dashboard page import
@@ -52,10 +52,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/login', // Change initial route to dashboard
+      initialRoute: '/room-list', // Change initial route to dashboard
       routes: {
         '/login': (context) => LoginPage(),
-        '/home': (context) => const HomePage(),
         '/profile': (context) => const ProfilePage(),
         '/create-booking': (context) => CreateBookingPage(),
         '/create-room': (context) => CreateRoomPage(),
@@ -65,6 +64,7 @@ class MyApp extends StatelessWidget {
           companyBranch: dummyBranch,
           upcomingBookings: dummyUpcomingBookings,
         ),
+        '/room-list': (context) => RoomPage(),
       },
     );
   }

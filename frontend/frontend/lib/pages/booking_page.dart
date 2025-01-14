@@ -155,7 +155,7 @@ class _BookingPageState extends State<BookingPage> {
                                         ),
                                         // Edit Button
                                         IconButton(
-                                          icon: const Icon(Icons.edit, size: 20),
+                                          icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
                                           onPressed: () {
                                             Navigator.push(
                                               context,
@@ -172,7 +172,7 @@ class _BookingPageState extends State<BookingPage> {
                                         ),
                                         // Delete Button
                                         IconButton(
-                                          icon: const Icon(Icons.delete, size: 20),
+                                          icon: const Icon(Icons.delete,color: Colors.red, size: 20),
                                           onPressed: () async {
                                             bool confirmed = await showDialog(
                                               context: context,
