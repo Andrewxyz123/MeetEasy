@@ -37,6 +37,21 @@ public class BookingController {
         return bookingRepository.findAll();
     }
 
+    // @Operation(summary = "Get Booking by UserId", operationId = "getBookingsByUserId")
+    // @GetMapping("/user/{userId}")
+    // public ResponseEntity<List<Room>> getRoomsBookedByUser(@PathVariable Long userId) {
+    //     User user = userRepository.findById(userId).orElse(null);
+    //     if (user == null) {
+    //         return ResponseEntity.notFound().build(); // 404 Not Found if user does not exist
+    //     }
+
+    //     List<Booking> bookings = bookingRepository.findByUserId(userId);
+    //     List<Room> bookedRooms = bookings.stream()
+    //                                       .map(Booking::getRoom) // Assuming Booking has a getRoom() method
+    //                                       .collect(Collectors.toList());
+
+    //     return ResponseEntity.ok(bookedRooms); // 200 OK with the list of booked rooms
+    // }
 
     @Operation(summary = "Get Bookings by UserId", operationId = "getBookingsByUserId")
     @GetMapping("/user/{userId}")
