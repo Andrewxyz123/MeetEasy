@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/models/booking.dart';
 import 'package:frontend/models/company.dart';
@@ -7,20 +8,25 @@ import 'package:intl/intl.dart';
 class DashboardPage extends StatelessWidget {
   final Company company;
   final String companyBranch;
-  final List<Booking> upcomingBookings;
+  // final List<Booking> upcomingBookings;
 
   const DashboardPage({
     Key? key,
     required this.company,
     required this.companyBranch,
-    required this.upcomingBookings,
+    // required this.upcomingBookings,
   }) : super(key: key);
+
+  
 
   @override
   Widget build(BuildContext context) {
     // Use ModalRoute.of(context) to retrieve arguments
     final Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final User user = arguments['user'];  // Access the user argument
+
+    final List<Booking> bookingList = arguments['booking-list'];
+    // final List<Booking> upcomingBookings = arguments;
 
     return Scaffold(
       body: SafeArea(
@@ -289,9 +295,9 @@ class DashboardPage extends StatelessWidget {
                       Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemCount: upcomingBookings.length,
+                          itemCount: bookingList.length,
                           itemBuilder: (context, index) {
-                            final booking = upcomingBookings[index];
+                            final booking = bookingList[index];
                             return Card(
                               margin: const EdgeInsets.only(bottom: 12),
                               child: ListTile(

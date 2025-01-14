@@ -20,10 +20,14 @@ class _BookingPageState extends State<BookingPage> {
   final BookingController _BookingController = Get.put(BookingController());
   final UserController userController = Get.put(UserController());
   
+  late List<Booking> bookingList;
 
   @override
   void initState() {
     super.initState();
+
+    bookingList = _BookingController.fetchBookingsForLoggedInUser() as List<Booking>;
+
     loadBookings();  // Call the async function
   }
 
@@ -32,10 +36,8 @@ class _BookingPageState extends State<BookingPage> {
       isLoading = true;
     });
 
-    await _BookingController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
-
     setState(() {
-      if (_BookingController.userBookings.isEmpty) {
+      if (bookingList.isEmpty) {
         print('No Bookings available.');
       } else {
         print('Bookings fetched successfully!');
@@ -83,9 +85,9 @@ class _BookingPageState extends State<BookingPage> {
                           Expanded(
                             child: ListView.builder(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
-                              itemCount: _BookingController.userBookings.length,
+                              itemCount: bookingList.length,
                               itemBuilder: (context, index) {
-                                var booking = _BookingController.userBookings[index];
+                                var booking = bookingList[index];
                                 
                                 // Format the date and time here
                                 String formattedDate = '';
