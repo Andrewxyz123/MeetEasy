@@ -14,22 +14,20 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
   final BookingController _BookingController = Get.put(BookingController());
+  late List<Booking> bookingList;
 
   @override
   void initState() {
     super.initState();
+
+    bookingList = _BookingController.fetchBookingsForLoggedInUser() as List<Booking>;
+
     loadBookings();
   }
 
   Future<void> loadBookings() async {
     setState(() {
       _BookingController.isLoading.value = true;
-    });
-
-    await _BookingController.getAllBookings();
-
-    setState(() {
-      _BookingController.isLoading.value = false;
     });
   }
 
@@ -43,9 +41,9 @@ class _BookingPageState extends State<BookingPage> {
                 child: CircularProgressIndicator(),
               )
             : ListView.builder(
-                itemCount: _BookingController.userBookings.length,
+                itemCount: bookingList.length,
                 itemBuilder: (context, index) {
-                  var booking = _BookingController.userBookings[index];
+                  var booking = bookingList[index];
 
                   // Format date and time
                   String formattedDate = '';

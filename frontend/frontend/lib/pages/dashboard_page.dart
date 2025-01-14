@@ -7,20 +7,24 @@ import 'package:intl/intl.dart';
 class DashboardPage extends StatelessWidget {
   final Company company;
   final String companyBranch;
-  final List<Booking> upcomingBookings;
+  // final List<Booking> upcomingBookings;
 
   const DashboardPage({
     Key? key,
     required this.company,
     required this.companyBranch,
-    required this.upcomingBookings,
+    // required this.upcomingBookings,
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
     // Use ModalRoute.of(context) to retrieve arguments
     final Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final User user = arguments['user'];  // Access the user argument
+
+    final List<Booking> bookingList = arguments['booking-list'];
+    // final List<Booking> upcomingBookings = arguments;
 
     return Scaffold(
       body: SafeArea(
@@ -117,7 +121,7 @@ class DashboardPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Role: ${user.user_role}',
+                              'Role: ${user.userRole}',
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.black87,
@@ -289,14 +293,14 @@ class DashboardPage extends StatelessWidget {
                       Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemCount: upcomingBookings.length,
+                          itemCount: bookingList.length,
                           itemBuilder: (context, index) {
-                            final booking = upcomingBookings[index];
+                            final booking = bookingList[index];
                             return Card(
                               margin: const EdgeInsets.only(bottom: 12),
                               child: ListTile(
                                 title: Text(
-                                  'Room ${booking.room_number}',
+                                  'Room ${booking.room?.roomNumber}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -307,14 +311,14 @@ class DashboardPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      booking.company_branch_name ?? '',
+                                      booking.room?.companyBranch?.name ?? '',
                                       style: const TextStyle(
                                         color: Colors.black87,
                                         fontSize: 14,
                                       ),
                                     ),
                                     Text(
-                                      '${DateFormat('MMM dd, HH:mm').format(booking.start_time!)} - ${DateFormat('HH:mm').format(booking.end_time!)}',
+                                      '${DateFormat('MMM dd, HH:mm').format(booking.startTime!)} - ${DateFormat('HH:mm').format(booking.endTime!)}',
                                       style: const TextStyle(
                                         color: Colors.black87,
                                         fontSize: 14,

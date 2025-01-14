@@ -2,7 +2,7 @@ package com.dna.meet_easy.model;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,10 +27,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference(value="company-user")
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    private Company company; // Change this back to Company entity
+    @JsonIgnoreProperties("users")
+    private Company company;
 
     @Column(nullable = false)
     private String companyloginid;

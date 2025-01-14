@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/controllers/RoomController.dart';
 import 'package:frontend/controllers/UserController.dart';
+import 'package:frontend/models/booking.dart';
 import 'package:frontend/models/user.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +13,7 @@ class LoginController {
 
   UserController userController = Get.put(UserController());
   RoomController roomController = RoomController();
+  BookingController bookingController = BookingController();
 
   Future<void> loginUser({
     required String company_id,
@@ -18,13 +21,14 @@ class LoginController {
     required String password,
     required BuildContext context,
   }) async {
-    print(company_id + employee_id + password);
-    if (company_id.isEmpty || password.isEmpty || employee_id.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter both Company ID, Employee ID and password.')),
-      );
-      return;
-    }
+    // print(company_id + employee_id + password);
+
+    // if (company_id.isEmpty || password.isEmpty || employee_id.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text('Please enter both Company ID, Employee ID and password.')),
+    //   );
+    //   return;
+    // }
 
     try {
       // Replace with your backend URL
@@ -37,9 +41,7 @@ class LoginController {
         'password': "password123"
       });
 
-      // Log the request body
-      print('Request Body: $requestBody');
-
+      print(requestBody);
       // Send a POST request to the backend
       final response = await http.post(
         url,
@@ -48,12 +50,16 @@ class LoginController {
       );
       print(response.body);
 
+
       if (response.statusCode == 200) {
         User loggedInUser = User.fromJson(jsonDecode(response.body));
 
+
         userController.setLoggedInUser(loggedInUser);
 
-        // print(userController.user?.fullname ?? 'BNAMANYA GAADA');
+
+        List<Booking> bookingList = await bookingController.fetchBookingsForLoggedInUser();
+
         // Login successful
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login successful! Welcome, ${loggedInUser.fullname}.')),
@@ -61,8 +67,9 @@ class LoginController {
 
         await roomController.getAllRooms(); // Assuming this is an async function
 
+
         // Navigate to the next page
-        Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': loggedInUser});
+        Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': loggedInUser, 'booking-list': bookingList});
       } else {
         // Login failed
         final error = jsonDecode(response.body);

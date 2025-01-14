@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/controllers/UserController.dart';
@@ -10,47 +9,40 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class BookingController extends GetxController {
-
-  // Rx<List<Booking>> bookings = Rx<List<Booking>>([]);
   final isLoading = false.obs;
   final box = GetStorage();
 
-  List<Booking?> userBookings = [];
-
   @override
   void onInit() {
-    // getAllBookings();
-    // TaleController().getAllTags();
     super.onInit();
   }
 
-// use method getBookingsByStatusAndUserId
-  Future getAllBookings() async {
+  // Fetch all bookings
+  Future<List<Booking>> getAllBookings() async {
     try {
-      userBookings = [];
-      var response = await http.get(Uri.parse('${url}/bookings'), headers: {
+      var response = await http.get(Uri.parse('$url/bookings'), headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${box.read('token')}',
       });
+
       if (response.statusCode == 200) {
         final content = json.decode(response.body);
-        userBookings.addAll(
-          (content as List).map((item) => Booking.fromJson(item)).toList(),
-        );
+        return (content as List)
+            .map((item) => Booking.fromJson(item))
+            .toList();
       } else {
         print(json.decode(response.body));
+        return [];
       }
     } catch (e) {
-
       print(e.toString());
+      return [];
     }
   }
 
-  Future<void> getBookingsByUserId(int userId) async {
+  // Fetch bookings by user ID
+  Future<List<Booking>> getBookingsByUserId(int userId) async {
     try {
-      userBookings = [];
-
-      // Construct the URL with userId
       var response = await http.get(
         Uri.parse('$bookingURL/user/$userId'),
         headers: {
@@ -59,72 +51,70 @@ class BookingController extends GetxController {
         },
       );
 
+      print("Finding bookings for user $userId...");
+      print("Response body: ${response.body}");
+
       if (response.statusCode == 200) {
         final content = json.decode(response.body);
-        // Parse each room and add to the userRooms list
-        userBookings.addAll(
-          (content as List).map((item) => Booking.fromJson(item)).toList(),
-        );
-      } else if (response.statusCode == 404) {
-        // Handle case when no rooms are found
-        final error = json.decode(response.body);
-        print("Error: ${error['error']}");
+        if (content is List) {
+          return content.map((item) => Booking.fromJson(item)).toList();
+        } else {
+          // Handle the case where the response is not a list
+          print("Expected a list but got: $content");
+          return [];
+        }
       } else {
-        // Handle other errors
-        print("Error: ${response.statusCode}");
         print(json.decode(response.body));
+        return [];
       }
     } catch (e) {
       print("Exception: $e");
+      return [];
     }
   }
 
-  Future<void> fetchRoomsForLoggedInUser() async {
-  final userController = Get.find<UserController>();
-  final bookingController = Get.find<BookingController>();
+  // Fetch bookings for the logged-in user
+  Future<List<Booking>> fetchBookingsForLoggedInUser() async {
+    final userController = Get.find<UserController>();
+    final userId = userController.user?.id;
 
-  final userId = userController.user?.id;
+    if (userId == null) {
+      Get.snackbar(
+        'Error',
+        'No logged-in user found.',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return [];
+    }
 
-  if (userId == null) {
-    print("Error: No logged-in user.");
-    Get.snackbar(
-      'Error',
-      'No logged-in user found.',
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-    );
-    return;
+    return await getBookingsByUserId(userId);
   }
-  // Call the method to get rooms by user ID
-  await bookingController.getBookingsByUserId(userId);
-}
-// 
 
-  Future createBooking({
+  // Create a booking
+  Future<bool> createBooking({
     required Room? room,
     required DateTime? start_time,
-    required DateTime? end_time
+    required DateTime? end_time,
   }) async {
     try {
       var data = {
-        'start_time': start_time,
-        'end_time': end_time,
+        'start_time': start_time.toString(),
+        'end_time': end_time.toString(),
       };
-      
-      // print(data);
 
       var response = await http.post(
-        Uri.parse('${bookingURL}/createBooking'),
+        Uri.parse('$bookingURL/createBooking'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
         },
-        body: data,
+        body: json.encode(data),
       );
 
       if (response.statusCode == 201) {
-        print(json.decode(response.body));
+        return true;
       } else {
         Get.snackbar(
           'Error',
@@ -133,14 +123,16 @@ class BookingController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
+        return false;
       }
     } catch (e) {
       print(e.toString());
+      return false;
     }
   }
 
-//updateBookingById
-  Future updateBooking({
+  // Update a booking
+  Future<bool> updateBooking({
     required int? bookingId,
     required Room? selectedRoom,
     required DateTime? startDateTime,
@@ -148,99 +140,68 @@ class BookingController extends GetxController {
   }) async {
     try {
       var data = {
-        'bookingId': bookingId,
         'room': selectedRoom,
-        'start_time': startDateTime,
-        'end_time': endDateTime,
+        'start_time': startDateTime.toString(),
+        'end_time': endDateTime.toString(),
       };
 
-      var response = await http.post(
-        Uri.parse('${bookingURL}/updateBooking/$bookingId'),
+      var response = await http.put(
+        Uri.parse('$bookingURL/updateBooking/$bookingId'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
         },
-        body: data,
+        body: json.encode(data),
       );
 
-      if (response.statusCode == 201) {
-        onInit();
-      } else {
-        Get.snackbar(
-          'Error',
-          json.decode(response.body)['message'],
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
+      return response.statusCode == 200;
     } catch (e) {
-      print('Error updating reel: $e');
+      print('Error updating booking: $e');
+      return false;
     }
   }
 
-//deleteBookingById
-  Future deleteBooking(int bookingId) async {
+  // Delete a booking
+  Future<bool> deleteBooking(int bookingId) async {
     try {
-      var response = await http.post(
-        Uri.parse('${bookingURL}/deleteBooking/$bookingId'),
+      var response = await http.delete(
+        Uri.parse('$bookingURL/deleteBooking/$bookingId'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
         },
       );
 
-      if (response.statusCode == 201) {
-        onInit();
-      } 
-      // else {
-      //   Get.snackbar(
-      //     'Error',
-      //     json.decode(response.body)['message'],
-      //     snackPosition: SnackPosition.TOP,
-      //     backgroundColor: Colors.red,
-      //     colorText: Colors.white,
-      //   );
-      // }
+      return response.statusCode == 200;
     } catch (e) {
-      print('Error deleting reel: $e');
+      print('Error deleting booking: $e');
+      return false;
     }
   }
 
-//changeBookingStatus
-  Future updateBookingStatus({
+  // Update booking status
+  Future<bool> updateBookingStatus({
     required int? bookingId,
-    required String? status
+    required String status,
   }) async {
     try {
       var data = {
-        'bookingId': bookingId,
         'status': status,
       };
 
-      var response = await http.post(
-        Uri.parse('${bookingURL}/updateBooking/$bookingId'),
+      var response = await http.put(
+        Uri.parse('$bookingURL/updateBooking/$bookingId'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
         },
-        body: data,
+        body: json.encode(data),
       );
 
-      if (response.statusCode == 201) {
-        onInit();
-      } else {
-        Get.snackbar(
-          'Error',
-          json.decode(response.body)['message'],
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
+      return response.statusCode == 200;
     } catch (e) {
-      print('Error updating reel: $e');
+      print('Error updating booking status: $e');
+      return false;
     }
   }
-
 }

@@ -1,50 +1,55 @@
 import 'dart:convert';
 
+import 'package:frontend/models/company.dart';
+
 class CompanyBranch {
   int? id; // Primary key
-  int? companyId; // Foreign key referencing companies(id)
+  Company? company; // Nested company object
   String? name; // Name of the branch
   String? address; // Address of the branch
   String? contactNumber; // Contact number of the branch
   String? email; // Email of the branch
-  // DateTime? createdAt; // Timestamp when the branch was created
+  DateTime? createdAt; // Timestamp when the branch was created
 
-  // Constructor
   CompanyBranch({
     this.id,
-    this.companyId,
+    this.company,
     this.name,
     this.address,
     this.contactNumber,
     this.email,
-    // this.createdAt,
+    this.createdAt,
   });
 
-  // Factory method to create an instance from JSON data
   factory CompanyBranch.fromJson(Map<String, dynamic> json) {
+    List<int> createdAtList = List<int>.from(json['createdAt'] ?? []);
     return CompanyBranch(
       id: json["id"],
-      companyId: json["company_id"],
+      company: json["company"] != null ? Company.fromJson(json["company"]) : null,
       name: json["name"],
       address: json["address"],
-      contactNumber: json["contact_number"],
+      contactNumber: json["contactNumber"],
       email: json["email"],
-      // createdAt: json["created_at"] != null
-      //     ? DateTime.parse(json["created_at"])
-          // : null, // Parse the created_at timestamp
+      createdAt: createdAtList.isNotEmpty ? DateTime(
+        createdAtList[0], // year
+        createdAtList[1], // month
+        createdAtList[2], // day
+        createdAtList[3], // hour
+        createdAtList[4], // minute
+        createdAtList[5], // second
+      ) : null,
     );
   }
 
-  // Convert the object to JSON (if needed for API sending)
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'company_id': companyId,
+      'company': company?.toJson(),
       'name': name,
       'address': address,
-      'contact_number': contactNumber,
+      'contactNumber': contactNumber,
       'email': email,
-      // 'created_at': createdAt?.toIso8601String(), // Convert DateTime to ISO string
+      'createdAt': createdAt?.toIso8601String(),
     };
   }
 }

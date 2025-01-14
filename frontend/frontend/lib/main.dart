@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/room-list', // Change initial route to dashboard
+      initialRoute: '/login', // Change initial route to dashboard
       routes: {
         '/login': (context) => LoginPage(),
         '/profile': (context) => const ProfilePage(),
@@ -62,7 +62,6 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => DashboardPage( 
           company: dummyCompany,
           companyBranch: dummyBranch,
-          upcomingBookings: dummyUpcomingBookings,
         ),
         '/room-list': (context) => RoomPage(),
       },

@@ -74,7 +74,7 @@ class _RoomPageState extends State<RoomPage> {
                             margin: const EdgeInsets.only(bottom: 12),
                             child: ListTile(
                               title: Text(
-                                room?.room_number ?? "Unknown Room",
+                                room?.roomNumber ?? "Unknown Room",
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -84,7 +84,7 @@ class _RoomPageState extends State<RoomPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Type: ${room?.room_type ?? "Unknown"}',
+                                    'Type: ${room?.roomType ?? "Unknown"}',
                                     style: GoogleFonts.poppins(fontSize: 14),
                                   ),
                                   Text(
@@ -104,8 +104,8 @@ class _RoomPageState extends State<RoomPage> {
                                         MaterialPageRoute(
                                           builder: (context) => UpdateRoomPage(
                                             roomId: room?.id,
-                                            roomNumber: room?.room_number,
-                                            roomType: room?.room_type,
+                                            roomNumber: room?.roomNumber,
+                                            roomType: room?.roomType,
                                             description: room?.description,
                                             capacity: room?.capacity,
                                           ),
