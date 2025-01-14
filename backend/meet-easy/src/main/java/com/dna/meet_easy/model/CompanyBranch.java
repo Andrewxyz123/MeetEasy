@@ -3,7 +3,7 @@ package com.dna.meet_easy.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -25,7 +25,7 @@ public class CompanyBranch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference(value = "company-branch")
+    // @JsonBackReference(value = "company-branch")
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
@@ -43,8 +43,8 @@ public class CompanyBranch {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @JsonManagedReference(value = "branch-room")
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("branch")
     private List<Room> rooms;
 
     // Getters and Setters

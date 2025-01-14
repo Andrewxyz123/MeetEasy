@@ -2,7 +2,7 @@ package com.dna.meet_easy.model;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,9 +21,9 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference(value="branch-room")
     @ManyToOne
     @JoinColumn(name = "branch_id", nullable = false)
+    @JsonIgnoreProperties("rooms")
     private CompanyBranch branch;
 
     @Column(name = "room_number", nullable = false, unique = true)

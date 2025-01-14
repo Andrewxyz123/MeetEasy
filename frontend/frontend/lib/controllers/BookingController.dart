@@ -51,16 +51,19 @@ class BookingController extends GetxController {
         },
       );
 
+      print("Finding bookings for user $userId...");
+      print("Response body: ${response.body}");
+
       if (response.statusCode == 200) {
         final content = json.decode(response.body);
-        return (content as List)
-            .map((item) => Booking.fromJson(item))
-            .toList();
-      } else if (response.statusCode == 404) {
-        print("Error: No bookings found for user $userId.");
-        return [];
+        if (content is List) {
+          return content.map((item) => Booking.fromJson(item)).toList();
+        } else {
+          // Handle the case where the response is not a list
+          print("Expected a list but got: $content");
+          return [];
+        }
       } else {
-        print("Error: ${response.statusCode}");
         print(json.decode(response.body));
         return [];
       }

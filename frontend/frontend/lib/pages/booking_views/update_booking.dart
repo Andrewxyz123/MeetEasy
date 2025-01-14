@@ -146,7 +146,7 @@ class _UpdateBookingPageState extends State<UpdateBookingPage> {
                 items: _RoomController.userRooms.map((room) {
                   return DropdownMenuItem<Room?>(
                     value: room,
-                    child: Text(room?.room_number ?? 'No room number'),
+                    child: Text(room?.roomNumber ?? 'No room number'),
                   );
                 }).toList(),
                 onChanged: (value) {
