@@ -35,7 +35,7 @@ class User {
       id: json['id'],
       fullname: json['fullname'],
       status: json['status'],
-      user_role: json['user_role'],
+      user_role: json['roleName'],
       // password: json['password']
       // token: json['token']
     );

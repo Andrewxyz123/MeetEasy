@@ -5,8 +5,8 @@ const url = 'http://10.0.2.2:8080/api'; //server url
 // URLs
 const loginURL = url + '/users/login-user';
 const registerURL = url + 'register';
-const bookingURL = url + '/booking';
-const roomURL = url + 'room';
+const bookingURL = url + '/bookings';
+const roomURL = url + '/rooms';
 
 // ----- Errors -----
 const serverError = 'Server error.';

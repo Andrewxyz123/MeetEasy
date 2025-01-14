@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/controllers/RoomController.dart';
 import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +9,7 @@ import 'package:http/http.dart' as http;
 class LoginController {
 
   UserController userController = UserController();
+  RoomController roomController = RoomController();
 
   Future<void> loginUser({
     required String company_id,
@@ -51,6 +53,8 @@ class LoginController {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login successful! Welcome, ${loggedInUser.fullname}.')),
         );
+
+        await roomController.getAllRooms(); // Assuming this is an async function
 
         // Navigate to the next page
         Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': loggedInUser});

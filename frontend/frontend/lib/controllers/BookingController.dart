@@ -23,6 +23,7 @@ class BookingController extends GetxController {
     super.onInit();
   }
 
+// use method getBookingsByStatusAndUserId
   Future getAllBookings() async {
     try {
       userBookings = [];
@@ -37,7 +38,7 @@ class BookingController extends GetxController {
         );
         print('hello');
       } else {
-        // print('test');
+        print('failed');
         print(json.decode(response.body));
       }
     } catch (e) {
@@ -45,6 +46,8 @@ class BookingController extends GetxController {
       print(e.toString());
     }
   }
+
+// 
 
   Future createBooking({
     required Room? room,
@@ -85,6 +88,7 @@ class BookingController extends GetxController {
     }
   }
 
+//updateBookingById
   Future updateBooking({
     required int? bookingId,
     required Room? selectedRoom,
@@ -124,6 +128,7 @@ class BookingController extends GetxController {
     }
   }
 
+//deleteBookingById
   Future deleteBooking(int bookingId) async {
     try {
       var response = await http.post(
@@ -151,6 +156,7 @@ class BookingController extends GetxController {
     }
   }
 
+//changeBookingStatus
   Future updateBookingStatus({
     required int? bookingId,
     required String? status

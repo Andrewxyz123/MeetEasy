@@ -26,7 +26,7 @@ class RoomController extends GetxController {
   Future getAllRooms() async {
     try {
       userRooms = [];
-      var response = await http.get(Uri.parse('${url}/rooms'), headers: {
+      var response = await http.get(Uri.parse('$roomURL'), headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${box.read('token')}',
       });
@@ -85,6 +85,7 @@ class RoomController extends GetxController {
     }
   }
 
+//updateRoomById
   Future updateRoom({
     required int? roomId,
     required String? roomNumber,
@@ -126,6 +127,7 @@ class RoomController extends GetxController {
     }
   }
 
+//deleteRoomById
   Future deleteRoom(int? RoomId) async {
     try {
       var response = await http.post(
