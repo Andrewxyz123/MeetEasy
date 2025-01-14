@@ -32,7 +32,7 @@ class _BookingPageState extends State<BookingPage> {
       isLoading = true;
     });
 
-    await _BookingController.getAllBookings(); // Assuming this is an async function
+    await _BookingController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
 
     setState(() {
       if (_BookingController.userBookings.isEmpty) {
