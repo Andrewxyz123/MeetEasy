@@ -105,8 +105,8 @@ class _RoomPageState extends State<RoomPage> {
                                         MaterialPageRoute(
                                           builder: (context) => RoomDetailPage(
                                             roomId: room?.id,
-                                            roomNumber: room?.room_number,
-                                            roomType: room?.room_type,
+                                            roomNumber: room?.roomNumber,
+                                            roomType: room?.roomType,
                                             description: room?.description,
                                             capacity: room?.capacity,
                                           ),

@@ -65,7 +65,7 @@ class BookingDetailPage extends StatelessWidget {
               ListTile(
                 title: const Text('Room'),
                 subtitle: Text(
-                  selectedRoom?.room_number ?? 'No room selected',
+                  selectedRoom?.roomNumber ?? 'No room selected',
                   style: theme.textTheme.bodyLarge,
                 ),
               ),
