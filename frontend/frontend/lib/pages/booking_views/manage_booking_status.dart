@@ -49,10 +49,10 @@ class _BookingPageState extends State<BookingPage> {
                   String formattedDate = '';
                   String formattedStartTime = '';
                   String formattedEndTime = '';
-                  if (booking?.start_time != null) {
-                    formattedDate = DateFormat('yyyy-MM-dd').format(booking!.start_time!);
-                    formattedStartTime = DateFormat('HH:mm').format(booking.start_time!);
-                    formattedEndTime = DateFormat('HH:mm').format(booking.end_time!);
+                  if (booking?.startTime != null) {
+                    formattedDate = DateFormat('yyyy-MM-dd').format(booking!.startTime!);
+                    formattedStartTime = DateFormat('HH:mm').format(booking.startTime!);
+                    formattedEndTime = DateFormat('HH:mm').format(booking.endTime!);
                   } else {
                     formattedDate = 'Invalid date';
                     formattedStartTime = 'XX';
@@ -80,7 +80,7 @@ class _BookingPageState extends State<BookingPage> {
                         children: [
                           // Room Number
                           Text(
-                            booking!.room_number ?? "Unknown Room",
+                            booking!.room!.roomNumber ?? "Unknown Room",
                             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                           ),
                           // Date
@@ -95,7 +95,7 @@ class _BookingPageState extends State<BookingPage> {
                           ),
                           // Company Branch Name
                           Text(
-                            booking.company_branch_name ?? "Unknown Company Branch",
+                            booking.room!.companyBranch!.name ?? "Unknown Company Branch",
                             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 10),

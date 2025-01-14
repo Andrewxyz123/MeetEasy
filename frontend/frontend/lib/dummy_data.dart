@@ -1,6 +1,5 @@
 import 'package:frontend/models/user.dart';
 import 'package:frontend/models/company.dart';
-import 'package:frontend/models/booking.dart';
 
 // Dummy User
 final User dummyUser = User(

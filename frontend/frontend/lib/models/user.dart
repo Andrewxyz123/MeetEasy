@@ -16,6 +16,9 @@ class User {
   String? userRole;
   String? status;
   Company? company;
+  String? password;
+  String? companyloginid;
+  String? employeeid;
   DateTime? createdAt;
 
   User({
@@ -25,25 +28,23 @@ class User {
     this.status,
     this.company,
     this.createdAt,
+    this.password,
+    this.companyloginid,
+    this.employeeid,
   });
 
   // function to convert json data to user model
-  factory User.fromJson(Map<String, dynamic> json){
-    List<int> createdAtList = List<int>.from(json['createdAt'] ?? []);
+  factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
       fullname: json['fullname'],
       status: json['status'],
       userRole: json['roleName'],
-      company: json['company'] != null ? Company.fromJson(json['company']) : null, 
-      createdAt: createdAtList.isNotEmpty ? DateTime(
-        createdAtList[0], // year
-        createdAtList[1], // month
-        createdAtList[2], // day
-        createdAtList[3], // hour
-        createdAtList[4], // minute
-        createdAtList[5], // second
-      ) : null,
+      company: json['company'] != null ? Company.fromJson(json['company']) : null,
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      password: json['password'],
+      companyloginid: json['companyloginid'],
+      employeeid: json['employeeid'],
     );
   }
 

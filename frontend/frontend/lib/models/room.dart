@@ -25,9 +25,7 @@ class Room {
     this.createdAt,
   });
 
-  // Factory method to create an instance from JSON data
   factory Room.fromJson(Map<String, dynamic> json) {
-    List<int> createdAtList = List<int>.from(json['createdAt'] ?? []);
     return Room(
       id: json["id"],
       branchId: json["branch_id"],
@@ -37,14 +35,7 @@ class Room {
       capacity: json["capacity"],
       status: json["status"],
       companyBranch: json['branch'] != null ? CompanyBranch.fromJson(json['branch']) : null,
-      createdAt: createdAtList.isNotEmpty ? DateTime(
-        createdAtList[0], // year
-        createdAtList[1], // month
-        createdAtList[2], // day
-        createdAtList[3], // hour
-        createdAtList[4], // minute
-        createdAtList[5], // second
-      ) : null,
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null, // Parse the date string directly
     );
   }
 

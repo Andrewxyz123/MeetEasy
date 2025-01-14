@@ -22,7 +22,6 @@ class CompanyBranch {
   });
 
   factory CompanyBranch.fromJson(Map<String, dynamic> json) {
-    List<int> createdAtList = List<int>.from(json['createdAt'] ?? []);
     return CompanyBranch(
       id: json["id"],
       company: json["company"] != null ? Company.fromJson(json["company"]) : null,
@@ -30,14 +29,7 @@ class CompanyBranch {
       address: json["address"],
       contactNumber: json["contactNumber"],
       email: json["email"],
-      createdAt: createdAtList.isNotEmpty ? DateTime(
-        createdAtList[0], // year
-        createdAtList[1], // month
-        createdAtList[2], // day
-        createdAtList[3], // hour
-        createdAtList[4], // minute
-        createdAtList[5], // second
-      ) : null,
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null, // Parse the date string directly
     );
   }
 

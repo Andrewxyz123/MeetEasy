@@ -16,6 +16,11 @@ final UserController _userController = Get.put(UserController());
 
 class _ProfilePageState extends State<ProfilePage> {
 
+
+  void refreshPage() {
+    setState(() {}); // Triggers a rebuild of the UI
+  }
+
   @override
   Widget build(BuildContext context) {
     // String? nameValue = _userController.currentUser.value?.fullname;
@@ -45,85 +50,44 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Column(
                     children: [
-                      Text(
-                        // nameValue!,
-                        _userController.user?.fullname ?? 'Name Not Found!',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16),
-                      // Other profile details here
-                      // ListTile(
-                      //   // leading: Container(
-                      //   //   width: 40,
-                      //   //   height: 40,
-                      //   //   decoration: BoxDecoration(
-                      //   //     borderRadius: BorderRadius.circular(100),
-                      //   //     color: Colors.blueGrey[100]
-                      //   //   ),
-                      //   //   child: ,
-                      //   // ),
-                      //   title: Text("User's Story Reel"),
-                      //   onTap: (){
-                      //     // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const UserReelScreen()));
-                      //   },
-                      //   trailing: Container(
-                      //     width: 30,
-                      //     height: 30,
-                      //     decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(100),
-                      //       color: Colors.blueGrey[100]
-                      //     ),
-                      //     child: const Icon(LineAwesomeIcons.angle_right_solid, size: 18, color: Colors.black),
-                      //   ),
-                      // ),
-                      // const Divider(),
-                      ListTile(
-                        title: Text("Edit Profile"),
-                        onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const UpdateProfilePage()));
-                        },
-                        trailing: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.blueGrey[100]
-                          ),
-                          child: const Icon(LineAwesomeIcons.angle_right_solid, size: 18, color: Colors.black),
-                        ),
-                      ),
-                      const Divider(),
+                      Obx(() {
+                        return Column(
+                          children: [
+                            Text(
+                              _userController.loggedInUser.value?.fullname ?? 'No Name',
+                              style: theme.textTheme.titleLarge,
+                            ),
+                            const SizedBox(height: 16),
+                            ListTile(
+                              title: Text("Edit Profile"),
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const UpdateProfilePage()));
+                              },
+                              trailing: Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.blueGrey[100]),
+                                child: const Icon(
+                                  LineAwesomeIcons.angle_right_solid,
+                                  size: 18,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            const Divider(),
+                          ],
+                        );
+                      }),
                     ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                    ),
-                    child: OutlinedButton(
-                      onPressed: () {
-                        // _userController.logout().then((value) => {
-                          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>LoginPage()), (route) => false)
-                        // });
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.black), // Black border
-                      ),
-                      child: Text(
-                        "Logout",
-                        style: GoogleFonts.poppins(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
             ),
           ),
+
         ],
       ),
     );

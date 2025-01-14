@@ -3,6 +3,7 @@ package com.dna.meet_easy.controller;
 import com.dna.meet_easy.model.User;
 import com.dna.meet_easy.repository.UserRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,16 @@ public class UserController {
         }
         
         return ResponseEntity.ok(existingUser);
+    }
+
+    @Operation(summary = "Update User Full Name", operationId = "updateUserFullName")
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updateUserFullName(@PathVariable Long userId, @Valid @RequestBody User updatedUser) {
+        return userRepository.findById(userId)
+                .map(user -> {
+                    user.setFullname(updatedUser.getFullname());
+                    return ResponseEntity.ok(userRepository.save(user));
+                })
+                .orElse(ResponseEntity.notFound().build()); // 404 Not Found
     }
 }

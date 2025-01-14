@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/controllers/LoginController.dart';
+import 'package:frontend/pages/profile_page.dart';
 // import 'package:ceritaku/views/home.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +12,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/models/user.dart';
 
-class UserController extends GetxController {
+class UserController {
   final isLoading = false.obs;
   final token = ''.obs;
 
@@ -18,43 +20,61 @@ class UserController extends GetxController {
 
   var loggedInUser = Rxn<User>();
 
+  // LoginController loginController = LoginController(); 
+
   void setLoggedInUser(User user) {
     loggedInUser.value = user;
   }
 
   User? get user => loggedInUser.value;
   
+  
+
 
   Future updateUser({
-    required String fullname
+    required String fullname,
+    required BuildContext context,
   }) async {
+    if (loggedInUser.value == null) {
+      Get.snackbar(
+        'Error',
+        'User not logged in.',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return; // Exit early if the user is not logged in
+    }
+
     try {
       var data = {
         'fullname': fullname,
       };
 
-      var response = await http.post(
-        Uri.parse('${userURL}/editUser'),
+      var response = await http.put(
+        Uri.parse('${userURL}/${loggedInUser.value?.id}'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
+          'Content-Type': 'application/json', // Ensure the content type is set
         },
-        body: data,
+        body: json.encode(data), // Convert the data to JSON
       );
 
-      final currentUserDataTemp = json.decode(response.body)['user'];
-      final User currentUserTemp = User.fromJson(currentUserDataTemp);
-      loggedInUser.value = currentUserTemp;
-      update();
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        
 
-      if (response.statusCode == 201) {
         Get.snackbar(
-          'Success',
-          json.decode(response.body)['message'],
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.blue,
-          colorText: Colors.white,
+            'Success',
+            json.decode(response.body)['message'],
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.blue,
+            colorText: Colors.white,
         );
+
+        (context as Element).markNeedsBuild();
+
+
       } else {
         Get.snackbar(
           'Error',
@@ -65,7 +85,13 @@ class UserController extends GetxController {
         );
       }
     } catch (e) {
-      print('Error updating reel: $e');
+      Get.snackbar(
+        'Error',
+        'An error occurred: $e', // Provide user-friendly feedback
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -76,4 +102,3 @@ class UserController extends GetxController {
   }
   
 }
-
