@@ -131,7 +131,11 @@ class _UpdateBookingPageState extends State<UpdateBookingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Booking'),
+        title: Text(
+          'Update Booking',
+          style: TextStyle(color: Colors.white), // Set title text color to white
+        ),
+        backgroundColor: const Color(0xFF4C51BF),
       ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),

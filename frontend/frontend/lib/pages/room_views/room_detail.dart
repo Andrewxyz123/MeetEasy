@@ -22,7 +22,10 @@ class RoomDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Room Details'),
+        title: Text(
+          'Create Booking',
+          style: TextStyle(color: Colors.white), // Set title text color to white
+        ),
         backgroundColor: const Color(0xFF4C51BF),
       ),
       body: Padding(
@@ -53,10 +56,6 @@ class RoomDetailPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              ListTile(
-                title: const Text('Room ID'),
-                subtitle: Text(roomId.toString(), style: theme.textTheme.bodyLarge),
-              ),
               ListTile(
                 title: const Text('Room Number'),
                 subtitle: Text(roomNumber!, style: theme.textTheme.bodyLarge),

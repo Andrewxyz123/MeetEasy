@@ -27,7 +27,10 @@ class BookingDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Booking Details'),
+        title: Text(
+          'Booking Detail',
+          style: TextStyle(color: Colors.white), // Set title text color to white
+        ),
         backgroundColor: const Color(0xFF4C51BF),
       ),
       body: Padding(

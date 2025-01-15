@@ -275,12 +275,30 @@ class BookingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Format the date and time here
+    String formattedStartTime = DateFormat('HH:mm').format(booking.startTime!);
+    String formattedEndTime = DateFormat('HH:mm').format(booking.endTime!);
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        title: Text('Room ${booking.room?.roomNumber}'),
-        subtitle: Text('${DateFormat('MMM dd, HH:mm').format(booking.startTime!)}'),
-        trailing: Text(booking.status?.toUpperCase() ?? ''),
+        title: Text('Room ${booking.room?.roomNumber ?? "Unknown Room"}'),
+        subtitle: Text('$formattedStartTime - $formattedEndTime'),
+        trailing: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: booking.status == 'approved' ? Colors.green[100] : Colors.orange[100],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            booking.status?.toUpperCase() ?? '',
+            style: TextStyle(
+              color: booking.status == 'approved' ? Colors.green[700] : Colors.orange[700],
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }

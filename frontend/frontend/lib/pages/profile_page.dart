@@ -35,8 +35,9 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text(
           'Profile',
-          style: theme.textTheme.titleLarge, // Use the theme's title style
+          style: TextStyle(color: Colors.white), // Set title text color to white
         ),
+        backgroundColor: const Color(0xFF4C51BF),
       ),
       body: Column(
         children: [
@@ -108,7 +109,7 @@ class _TopPortion extends StatelessWidget {
               gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  colors: [Color(0xff0043ba), Color(0xff006df1)]),
+                  colors: [Color(0xff0043ba), Color(0xFF4C51BF)]),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(50),
                 bottomRight: Radius.circular(50),

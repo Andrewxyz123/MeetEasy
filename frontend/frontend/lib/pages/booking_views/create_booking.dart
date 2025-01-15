@@ -170,8 +170,9 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
       appBar: AppBar(
         title: Text(
           'Create Booking',
-          style: theme.textTheme.titleLarge, // Use the theme's title style
+          style: TextStyle(color: Colors.white), // Set title text color to white
         ),
+        backgroundColor: const Color(0xFF4C51BF),
       ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),

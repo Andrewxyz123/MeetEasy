@@ -68,14 +68,10 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Update Story Reel',
-          style: GoogleFonts.montserrat(
-            fontSize: size * 0.060,
-            color: Colors.white,
-          ),
+          'Update Profile',
+          style: TextStyle(color: Colors.white), // Set title text color to white
         ),
-        backgroundColor: Colors.blue[900],
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: const Color(0xFF4C51BF),
       ),
 
       body: _loading

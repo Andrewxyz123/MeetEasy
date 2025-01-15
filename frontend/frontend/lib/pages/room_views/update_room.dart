@@ -88,7 +88,11 @@ class _UpdateRoomPageState extends State<UpdateRoomPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Room', style: theme.textTheme.titleLarge),
+        title: Text(
+          'Create Booking',
+          style: TextStyle(color: Colors.white), // Set title text color to white
+        ),
+        backgroundColor: const Color(0xFF4C51BF),
       ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),

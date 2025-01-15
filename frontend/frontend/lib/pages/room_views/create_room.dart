@@ -60,9 +60,10 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Create Room',
-          style: theme.textTheme.titleLarge,
+          'Create Booking',
+          style: TextStyle(color: Colors.white), // Set title text color to white
         ),
+        backgroundColor: const Color(0xFF4C51BF),
       ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/booking.dart';
+import 'package:frontend/pages/booking_views/booking_detail.dart';
+import 'package:frontend/pages/booking_views/update_booking.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:frontend/controllers/BookingController.dart';
@@ -53,8 +55,9 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text(
         'Bookings',
-        style: theme.textTheme.titleLarge, // Use the theme's title style
+        style: TextStyle(color: Colors.white), // Set title text color to white
       ),
+      backgroundColor: const Color(0xFF4C51BF),
     ),
     backgroundColor: Colors.blueGrey[50], // Background color for the entire page
     body: isLoading
@@ -125,9 +128,102 @@ Widget build(BuildContext context) {
                                       booking.room?.companyBranch?.name ?? "Sentosa Company",
                                       style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                                     ),
+                                    const SizedBox(height: 10), // Space between text and icons
+                                    // Icon buttons stacked vertically
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Status Container
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: booking.status == 'approved'
+                                                ? Colors.green[100]
+                                                : Colors.orange[100],
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Text(
+                                            booking.status?.toUpperCase() ?? '',
+                                            style: TextStyle(
+                                              color: booking.status == 'approved'
+                                                  ? Colors.green[700]
+                                                  : Colors.orange[700],
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8), // Space between the status and icons
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(Icons.info, color: Colors.green, size: 20),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => BookingDetailPage(
+                                                      bookingId: booking.id,
+                                                      selectedRoom: booking.room,
+                                                      startTime: booking.startTime,
+                                                      endTime: booking.endTime,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => UpdateBookingPage(
+                                                      bookingId: booking.id,
+                                                      selectedRoom: booking.room,
+                                                      start_time: booking.startTime,
+                                                      end_time: booking.endTime,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                                              onPressed: () async {
+                                                bool confirmed = await showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    title: const Text('Confirm Delete'),
+                                                    content: const Text('Are you sure you want to delete this booking?'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () => Navigator.pop(context, false),
+                                                        child: const Text('Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () => Navigator.pop(context, true),
+                                                        child: const Text('Delete'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+
+                                                if (confirmed) {
+                                                  // Perform deletion action here
+                                                  // _BookingController.deleteBooking(booking.id);
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                                // Add more properties as needed
                               ),
                             );
                           },
@@ -138,7 +234,8 @@ Widget build(BuildContext context) {
                 ),
               ),
             ],
-          ),
-  );
+              )
+      );
+  // );
 }
 }
