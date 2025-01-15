@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 class LoginController {
 
   UserController userController = Get.put(UserController());
-  RoomController roomController = RoomController();
+  RoomController roomController =  Get.put(RoomController());
   BookingController bookingController = BookingController();
 
   Future<void> logout(BuildContext context) async {
@@ -78,8 +78,9 @@ class LoginController {
         );
 
         // print('Fetching rooms for logged-in user...');
-        await roomController.getAllRooms(); // Assuming this is an async function
-        // print('Rooms fetched successfully');
+        await roomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
+        print('Rooms fetched successfully');
+        print(roomController.userRooms);
 
         // Navigate to the next page
         Navigator.pushReplacementNamed(context, '/dashboard', arguments: 
