@@ -40,7 +40,7 @@ class _RoomPageState extends State<RoomPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Create Booking',
+          'Rooms',
           style: TextStyle(color: Colors.white), // Set title text color to white
         ),
         backgroundColor: const Color(0xFF4C51BF),
