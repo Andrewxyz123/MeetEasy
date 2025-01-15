@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:frontend/constants/constants.dart';
-import 'package:frontend/controllers/LoginController.dart';
-import 'package:frontend/pages/profile_page.dart';
+// import 'package:frontend/controllers/LoginController.dart';
+// import 'package:frontend/pages/profile_page.dart';
 // import 'package:ceritaku/views/home.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

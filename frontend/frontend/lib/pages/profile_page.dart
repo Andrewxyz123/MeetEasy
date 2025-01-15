@@ -1,6 +1,6 @@
 import 'package:frontend/pages/profile_views/update_profile_form.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/controllers/UserController.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';

@@ -1,6 +1,7 @@
 package com.dna.meet_easy.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -103,7 +104,8 @@ public class BookingController {
 
     @Operation(summary = "Change Booking Status", operationId = "changeBookingStatus")
     @PutMapping("/{bookingId}/status")
-    public ResponseEntity<Booking> changeBookingStatus(@PathVariable Long bookingId, @RequestBody String newStatus) {
+    public ResponseEntity<Booking> changeBookingStatus(@PathVariable Long bookingId, @RequestBody Map<String, String> statusMap) {
+        String newStatus = statusMap.get("status");
         return bookingRepository.findById(bookingId)
                 .map(booking -> {
                     booking.setStatus(newStatus);
@@ -113,7 +115,7 @@ public class BookingController {
     }
 
     @Operation(summary = "Delete Booking by ID", operationId = "deleteBookingById")
-    @DeleteMapping("/{bookingId}")
+    @DeleteMapping("/deleteBooking/{bookingId}")
     public ResponseEntity<Void> deleteBookingById(@PathVariable Long bookingId) {
         if (bookingRepository.existsById(bookingId)) {
             bookingRepository.deleteById(bookingId);

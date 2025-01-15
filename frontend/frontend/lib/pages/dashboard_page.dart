@@ -4,16 +4,17 @@ import 'package:frontend/models/booking.dart';
 import 'package:frontend/models/room.dart';
 import 'package:frontend/models/company.dart';
 import 'package:intl/intl.dart';
+// import 'package:get/get.dart';
 
 class DashboardPage extends StatelessWidget {
   final Company company;
   final String companyBranch;
 
   const DashboardPage({
-    Key? key,
+    super.key,
     required this.company,
     required this.companyBranch,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class DashboardPage extends StatelessWidget {
     final User user = arguments['user'];
     final List<Booking> bookingList = arguments['booking-list'];
     final List<Room>? roomList = arguments['room-list'];
+    final String? roleName = user.role?.name;
 
     return Scaffold(
       body: SafeArea(
@@ -63,6 +65,7 @@ class DashboardPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
+                        // ignore: deprecated_member_use
                         color: const Color(0xFF718096).withOpacity(0.1),
                         spreadRadius: 2,
                         blurRadius: 5,
@@ -98,9 +101,7 @@ class DashboardPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                user?.role?.name?.toLowerCase() == 'admin'
-                                    ? 'Role: Room Manager'
-                                    : 'Role: Employee',
+                                roleName!,
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.black87,
@@ -127,6 +128,7 @@ class DashboardPage extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Booking Button
+              // ignore: sized_box_for_whitespace
               Container(
                 height: MediaQuery.of(context).size.height * 0.15,
                 width: double.infinity,
@@ -148,6 +150,7 @@ class DashboardPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
+                            // ignore: deprecated_member_use
                             color: const Color(0xFF718096).withOpacity(0.1),
                             spreadRadius: 2,
                             blurRadius: 5,
@@ -192,6 +195,66 @@ class DashboardPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
+              // Room Manager Button
+              if(roleName == 'room_manager')
+                // ignore: sized_box_for_whitespace
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  width: double.infinity,
+                  child: Material(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(15),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(15),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/manage-booking-status');
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFF4C51BF), Color(0xFF434190)],
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              // ignore: deprecated_member_use
+                              color: const Color(0xFF718096).withOpacity(0.1),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(16.0),
+                        child: const Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Approve meeting rooms',
+                                    style: TextStyle(fontSize: 16, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 16),
+
               // List Sections
               Expanded(
                 child: ListView(
@@ -233,10 +296,10 @@ class SectionHeader extends StatelessWidget {
   final VoidCallback onViewAll;
 
   const SectionHeader({
-    Key? key,
+    super.key,
     required this.title,
     required this.onViewAll,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +336,7 @@ class SectionHeader extends StatelessWidget {
 class BookingCard extends StatelessWidget {
   final Booking booking;
 
-  const BookingCard({Key? key, required this.booking}) : super(key: key);
+  const BookingCard({super.key, required this.booking});
 
   @override
   Widget build(BuildContext context) {
@@ -309,7 +372,7 @@ class BookingCard extends StatelessWidget {
 class RoomCard extends StatelessWidget {
   final Room room;
 
-  const RoomCard({Key? key, required this.room}) : super(key: key);
+  const RoomCard({super.key, required this.room});
 
   @override
   Widget build(BuildContext context) {

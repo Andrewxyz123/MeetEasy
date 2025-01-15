@@ -36,10 +36,10 @@ class _RoomPageState extends State<RoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Rooms',
           style: TextStyle(color: Colors.white), // Set title text color to white
         ),

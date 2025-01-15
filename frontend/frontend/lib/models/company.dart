@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:intl/intl.dart';
-
 class Company {
   int? id;
   String? name; // Name of the company

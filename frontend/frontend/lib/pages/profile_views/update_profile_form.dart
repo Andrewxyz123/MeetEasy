@@ -4,9 +4,9 @@ import 'package:frontend/controllers/UserController.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/booking.dart';
 import 'package:frontend/models/room.dart';
-import 'package:frontend/pages/dashboard_page.dart';
-import 'package:frontend/pages/login_page.dart';
-import 'package:frontend/pages/profile_page.dart';
+// import 'package:frontend/pages/dashboard_page.dart';
+// import 'package:frontend/pages/login_page.dart';
+// import 'package:frontend/pages/profile_page.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 

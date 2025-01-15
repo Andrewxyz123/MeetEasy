@@ -50,7 +50,7 @@ Future<void> loadBookings() async {
 
 @override
 Widget build(BuildContext context) {
-  final theme = Theme.of(context);
+  // final theme = Theme.of(context);
   return Scaffold(
     appBar: AppBar(
       title: Text(
@@ -214,7 +214,7 @@ Widget build(BuildContext context) {
 
                                                 if (confirmed) {
                                                   // Perform deletion action here
-                                                  // _BookingController.deleteBooking(booking.id);
+                                                  _BookingController.deleteBooking(booking.id!);
                                                 }
                                               },
                                             ),

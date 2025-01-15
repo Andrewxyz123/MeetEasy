@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/controllers/RoomController.dart';
-import 'package:frontend/controllers/UserController.dart';
+// import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/room.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +24,7 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
 
   RoomController _RoomController = Get.put(RoomController());
   BookingController _BookingController = Get.put(BookingController());
-  UserController _userController = Get.put(UserController());
+  // UserController _userController = Get.put(UserController());
 
   bool _isSlotAvailable = true;
 

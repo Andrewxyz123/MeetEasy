@@ -98,20 +98,31 @@ class BookingController extends GetxController {
     required DateTime? start_time,
     required DateTime? end_time,
   }) async {
+    
+    final userController = Get.find<UserController>();
     try {
-      var data = {
-        'start_time': start_time.toString(),
-        'end_time': end_time.toString(),
-      };
+      final Booking booking = Booking(
+        room: room,
+        user: userController.user,
+        startTime: start_time,
+        endTime: end_time,
+        status: 'requested'
+      );
+      final requestBody = jsonEncode(booking.toJson());
+
+      print("CREATE BOOKING REQUEST BODY: "+requestBody);
 
       var response = await http.post(
         Uri.parse('$bookingURL/createBooking'),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
+          'Content-Type': 'application/json', // Add this line
         },
-        body: json.encode(data),
+        body: requestBody,
       );
+      
+      print("CREAT BOOKING RESPONSE BODY: "+response.body);
 
       if (response.statusCode == 201) {
         return true;
@@ -185,19 +196,23 @@ class BookingController extends GetxController {
     required String? status,
   }) async {
     try {
-      var data = {
+      // Create the request body
+      final requestBody = jsonEncode({
         'status': status,
-      };
+      });
+
+      print("UPDATE BOOKING REQUEST BODY: "+requestBody);
 
       var response = await http.put(
-        Uri.parse('$bookingURL/updateBooking/$bookingId'),
+        Uri.parse('$bookingURL/$bookingId/status'),
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'application/json', // Add this line
           'Authorization': 'Bearer ${box.read('token')}',
         },
-        body: json.encode(data),
+        body: requestBody,
       );
-
+      print("UPDATE BOOKING RESPONSE: "+response.body);
       return response.statusCode == 200;
     } catch (e) {
       print('Error updating booking status: $e');

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Role {
   int? id; // Primary key
   String? name; // Unique name of the role (e.g., 'room_manager', 'employee')

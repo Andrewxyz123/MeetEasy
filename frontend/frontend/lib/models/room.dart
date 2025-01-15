@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:frontend/models/company_branch.dart';
 
 class Room {
