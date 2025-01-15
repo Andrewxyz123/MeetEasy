@@ -63,6 +63,9 @@ class UserController {
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         
+        User updatedUserData = User.fromJson(jsonDecode(response.body));
+
+        this.setLoggedInUser(updatedUserData);
 
         Get.snackbar(
             'Success',

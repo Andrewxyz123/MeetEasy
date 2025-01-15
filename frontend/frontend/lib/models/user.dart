@@ -9,6 +9,7 @@
 //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 //     UNIQUE (companyloginid, employeeid)    
 import 'package:frontend/models/company.dart';
+import 'package:frontend/models/role.dart';
 
 class User {
   int? id;
@@ -20,6 +21,7 @@ class User {
   String? companyloginid;
   String? employeeid;
   DateTime? createdAt;
+  Role? role;
 
   User({
     this.id,
@@ -31,6 +33,7 @@ class User {
     this.password,
     this.companyloginid,
     this.employeeid,
+    this.role
   });
 
   // function to convert json data to user model
@@ -45,6 +48,7 @@ class User {
       password: json['password'],
       companyloginid: json['companyloginid'],
       employeeid: json['employeeid'],
+      role: json['role'] != null ? Role.fromJson(json['role']) : null,
     );
   }
 
@@ -55,5 +59,6 @@ class User {
         "userRole": userRole,
         "company": company?.toJson(),
         "createdAt": createdAt?.toIso8601String(),
+        "role": role?.toJson(),
       };
 }

@@ -211,4 +211,56 @@ class RoomController extends GetxController {
     }
   }
 
+    // Fetch bookings by user ID
+  Future<List<Room>> getRoomsByUserId2(int userId) async {
+    try {
+      var response = await http.get(
+        Uri.parse('$roomURL/user/$userId'),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${box.read('token')}',
+        },
+      );
+
+      print("Finding rooms for user $userId...");
+      print("Response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final content = json.decode(response.body);
+        if (content is List) {
+          return content.map((item) => Room.fromJson(item)).toList();
+        } else {
+          // Handle the case where the response is not a list
+          print("Expected a list but got: $content");
+          return [];
+        }
+      } else {
+        print(json.decode(response.body));
+        return [];
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return [];
+    }
+  }
+
+  // Fetch bookings for the logged-in user
+  Future<List<Room>> fetchRoomsForLoggedInUser2() async {
+    final userController = Get.find<UserController>();
+    final userId = userController.user?.id;
+
+    if (userId == null) {
+      Get.snackbar(
+        'Error',
+        'No logged-in user found.',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return [];
+    }
+
+    return await getRoomsByUserId2(userId);
+  }
+
 }

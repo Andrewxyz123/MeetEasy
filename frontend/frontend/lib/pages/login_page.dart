@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/BookingController.dart';
+import 'package:frontend/controllers/UserController.dart';
+import 'package:get/get.dart';
 import '../controllers/loginController.dart';
 
 class LoginPage extends StatelessWidget {
@@ -9,6 +11,7 @@ class LoginPage extends StatelessWidget {
   final employeeIdController = TextEditingController();
   final passwordController = TextEditingController();
   final LoginController loginController = LoginController();
+  // final UserController _userController = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {

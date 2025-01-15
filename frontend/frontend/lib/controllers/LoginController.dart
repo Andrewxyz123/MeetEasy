@@ -5,6 +5,7 @@ import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/controllers/RoomController.dart';
 import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/booking.dart';
+import 'package:frontend/models/room.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/pages/login_page.dart';
 import 'package:get/get.dart';
@@ -64,7 +65,12 @@ class LoginController {
 
         print('Fetching bookings for logged-in user...');
         List<Booking> bookingList = await bookingController.fetchBookingsForLoggedInUser();
-        print('Booking list: ' + bookingList.toString());
+        // print('Booking list: ' + bookingList.toString());
+        List<Room> roomList = [];
+        if (loggedInUser.role?.name?.toLowerCase() == 'admin') {
+        roomList = await roomController.fetchRoomsForLoggedInUser2();
+        print('Rooms fetched successfully');
+      }
 
         // Login successful
         ScaffoldMessenger.of(context).showSnackBar(
@@ -76,7 +82,11 @@ class LoginController {
         print('Rooms fetched successfully');
 
         // Navigate to the next page
-        Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': loggedInUser, 'booking-list': bookingList});
+        Navigator.pushReplacementNamed(context, '/dashboard', arguments: 
+        {'user': loggedInUser,
+         'booking-list': bookingList,
+         if (loggedInUser.role?.name?.toLowerCase() == 'admin') 'room-list': roomList,
+         });
       } else {
         // Login failed
         final error = jsonDecode(response.body);
