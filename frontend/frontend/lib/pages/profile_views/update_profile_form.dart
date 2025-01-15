@@ -123,7 +123,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                                 Navigator.of(context).pop();
                                 Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': _userController.user,
                                  'booking-list': bookingList,
-                                 if (_userController.user?.role?.name?.toLowerCase() == 'admin') 'room-list': roomList,
+                                 if (_userController.user?.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
                                  });
                               },
                             ),

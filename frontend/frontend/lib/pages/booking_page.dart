@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/RoomController.dart';
 import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/booking.dart';
+import 'package:frontend/models/room.dart';
 import 'package:frontend/pages/booking_views/booking_detail.dart';
 import 'package:frontend/pages/booking_views/update_booking.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,6 +22,9 @@ class _BookingPageState extends State<BookingPage> {
   bool isLoading = true;
   final BookingController _BookingController = Get.put(BookingController());
   final UserController userController = Get.put(UserController());
+  RoomController _RoomController = Get.put(RoomController());
+  
+  List<Room> roomList = [];
   
   late List<Booking> bookingList = [];
 
@@ -213,9 +218,21 @@ Widget build(BuildContext context) {
                                                 );
 
                                                 if (confirmed) {
-                                                  // Perform deletion action here
                                                   _BookingController.deleteBooking(booking.id!);
-                                                }
+                                                  await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
+                                                  final bookings = await _BookingController.fetchBookingsForLoggedInUser();
+                                                  final rooms = await _RoomController.fetchRoomsForLoggedInUser2();
+                                                  // Perform deletion action here
+
+                                                  setState(() {
+                                                    bookingList = bookings;
+                                                    roomList = rooms;
+                                                  });
+                                                  Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': userController.user,
+                                                    'booking-list': bookingList,
+                                                    if (userController.user?.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
+                                                  });
+                                                }   
                                               },
                                             ),
                                           ],

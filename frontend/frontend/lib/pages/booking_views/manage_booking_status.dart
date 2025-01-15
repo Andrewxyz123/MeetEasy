@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/RoomController.dart';
 import 'package:frontend/controllers/UserController.dart';
 import 'package:frontend/models/booking.dart';
 import 'package:frontend/controllers/BookingController.dart';
+import 'package:frontend/models/room.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -16,8 +18,10 @@ class ManageBookingStatusPage extends StatefulWidget {
 class _ManageBookingStatusPageState extends State<ManageBookingStatusPage> {
   final BookingController _bookingController = Get.put(BookingController());
   final UserController userController = Get.put(UserController());
-
+  
+  RoomController _RoomController = Get.put(RoomController());
   List<Booking> bookingList = [];
+  List<Room> roomList = [];
   bool isLoading = true;
 
   @override
@@ -39,8 +43,22 @@ class _ManageBookingStatusPageState extends State<ManageBookingStatusPage> {
   }
 
   Future<void> updateBookingStatus(int? bookingId, String? newStatus) async {
+
+    await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
+    final bookings = await _bookingController.fetchBookingsForLoggedInUser();
+    final rooms = await _RoomController.fetchRoomsForLoggedInUser2();
+
     try {
       await _bookingController.updateBookingStatus(bookingId: bookingId, status: newStatus);
+
+      setState(() {
+        bookingList = bookings;
+        roomList = rooms;
+      });
+      Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': userController.user,
+        'booking-list': bookingList,
+        if (userController.user?.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
+      });
       loadBookings(); // Refresh the booking list after updating
     } catch (e) {
       print('Error updating booking status: $e');

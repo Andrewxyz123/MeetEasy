@@ -5,7 +5,6 @@ import 'package:frontend/models/room.dart';
 import 'package:frontend/models/company.dart';
 import 'package:intl/intl.dart';
 // import 'package:get/get.dart';
-
 class DashboardPage extends StatelessWidget {
   final Company company;
   final String companyBranch;
@@ -28,7 +27,7 @@ class DashboardPage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: ListView(
             children: [
               // App Title
               const Row(
@@ -128,7 +127,6 @@ class DashboardPage extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Booking Button
-              // ignore: sized_box_for_whitespace
               Container(
                 height: MediaQuery.of(context).size.height * 0.15,
                 width: double.infinity,
@@ -196,8 +194,7 @@ class DashboardPage extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Room Manager Button
-              if(roleName == 'room_manager')
-                // ignore: sized_box_for_whitespace
+              if (roleName == 'room_manager')
                 Container(
                   height: MediaQuery.of(context).size.height * 0.15,
                   width: double.infinity,
@@ -256,33 +253,26 @@ class DashboardPage extends StatelessWidget {
               const SizedBox(height: 16),
 
               // List Sections
-              Expanded(
-                child: ListView(
-                  children: [
-                    // Display Upcoming Bookings
-                    if (bookingList.isNotEmpty) ...[
-                      SectionHeader(
-                        title: 'Upcoming Meetings',
-                        onViewAll: () {
-                          Navigator.pushNamed(context, '/booking-list');
-                        },
-                      ),
-                      ...bookingList.map((booking) => BookingCard(booking: booking)).toList(),
-                    ],
-
-                    // Display Room List
-                    if (roomList != null && roomList.isNotEmpty) ...[
-                      SectionHeader(
-                        title: 'Available Rooms',
-                        onViewAll: () {
-                          Navigator.pushNamed(context, '/room-list');
-                        },
-                      ),
-                      ...roomList.map((room) => RoomCard(room: room)).toList(),
-                    ],
-                  ],
+              if (bookingList.isNotEmpty) ...[
+                SectionHeader(
+                  title: 'Upcoming Meetings',
+                  onViewAll: () {
+                    Navigator.pushNamed(context, '/booking-list');
+                  },
                 ),
-              ),
+                ...bookingList.map((booking) => BookingCard(booking: booking)).toList(),
+              ],
+
+              // Display Room List
+              if (roomList != null && roomList.isNotEmpty) ...[
+                SectionHeader(
+                  title: 'Available Rooms',
+                  onViewAll: () {
+                    Navigator.pushNamed(context, '/room-list');
+                  },
+                ),
+                ...roomList.map((room) => RoomCard(room: room)).toList(),
+              ],
             ],
           ),
         ),
@@ -358,9 +348,8 @@ class BookingCard extends StatelessWidget {
           child: Text(
             booking.status?.toUpperCase() ?? '',
             style: TextStyle(
-              color: booking.status == 'approved' ? Colors.green[700] : Colors.orange[700],
-              fontSize: 12,
               fontWeight: FontWeight.bold,
+              color: booking.status == 'approved' ? Colors.green : Colors.orange,
             ),
           ),
         ),
@@ -379,8 +368,11 @@ class RoomCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        title: Text('Room ${room.roomNumber}'),
-        subtitle: Text('Capacity: ${room.capacity}'),
+        title: Text('Room ${room.roomNumber ?? "Unknown Room"}'),
+        subtitle: Text('Capacity: ' + room.capacity.toString()),
+        onTap: () {
+          Navigator.pushNamed(context, '/room-detail', arguments: {'room': room});
+        },
       ),
     );
   }

@@ -67,7 +67,7 @@ class LoginController {
         List<Booking> bookingList = await bookingController.fetchBookingsForLoggedInUser();
         // print('Booking list: ' + bookingList.toString());
         List<Room> roomList = [];
-        if (loggedInUser.role?.name?.toLowerCase() == 'admin') {
+        if (loggedInUser.role?.name?.toLowerCase() == 'room_manager') {
         roomList = await roomController.fetchRoomsForLoggedInUser2();
         // print('Rooms fetched successfully');
       }
@@ -84,9 +84,9 @@ class LoginController {
         // Navigate to the next page
         Navigator.pushReplacementNamed(context, '/dashboard', arguments: 
         {'user': loggedInUser,
-         'booking-list': bookingList,
-         if (loggedInUser.role?.name?.toLowerCase() == 'admin') 'room-list': roomList,
-         });
+          'booking-list': bookingList,
+          if (loggedInUser.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
+        });
       } else {
         // Login failed
         final error = jsonDecode(response.body);

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/controllers/RoomController.dart';
-// import 'package:frontend/controllers/UserController.dart';
+import 'package:frontend/controllers/UserController.dart';
+import 'package:frontend/models/booking.dart';
 import 'package:frontend/models/room.dart';
 import 'package:get/get.dart';
 
@@ -24,11 +25,16 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
 
   RoomController _RoomController = Get.put(RoomController());
   BookingController _BookingController = Get.put(BookingController());
-  // UserController _userController = Get.put(UserController());
+  UserController _userController = Get.put(UserController());
+  
+  List<Booking> bookingList = [];
+  List<Room> roomList = [];
 
   bool _isSlotAvailable = true;
 
   bool isLoading = true;
+
+  
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -71,7 +77,13 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
-  void _saveBooking() {
+
+  
+  void _saveBooking() async{
+    // Perform the async operation
+    await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
+    final bookings = await _BookingController.fetchBookingsForLoggedInUser();
+    final rooms = await _RoomController.fetchRoomsForLoggedInUser2();
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -97,9 +109,8 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
 
       // Mock validation for time slot availability
       setState(() {
-        // _isSlotAvailable = _selectedRoom != "Conference Room A" ||
-        //     _selectedDate != DateTime(2023, 11, 15) ||
-        //     _selectedStartTime != TimeOfDay(hour: 9, minute: 0);
+        bookingList = bookings;
+        roomList = rooms;
       });
 
       if (isCreated == true) {
@@ -111,19 +122,24 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
           SnackBar(content: Text('Error in Creating Booking.')),
         );
       }
+
+      Navigator.of(context).pop();
+      Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': _userController.user,
+        'booking-list': bookingList,
+        if (_userController.user?.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
+      });
     }
   }
 
-     Future<void> createBookingLoad() async {
+  Future<void> createBookingLoad() async {
     // Start loading
     setState(() {
       isLoading = true;
     });
 
-    // Perform the async operation
-    await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
-
+    
     // Once async work is done, call setState to update the UI
+    
     setState(() {
       if (_RoomController.userRooms.isEmpty) {
         print('No rooms available');
