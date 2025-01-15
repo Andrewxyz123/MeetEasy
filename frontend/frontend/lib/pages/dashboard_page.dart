@@ -98,7 +98,9 @@ class DashboardPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Role: ${user.userRole}',
+                                user?.role?.name?.toLowerCase() == 'admin'
+                                    ? 'Role: Room Manager'
+                                    : 'Role: Employee',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.black87,

@@ -182,7 +182,7 @@ class BookingController extends GetxController {
   // Update booking status
   Future<bool> updateBookingStatus({
     required int? bookingId,
-    required String status,
+    required String? status,
   }) async {
     try {
       var data = {

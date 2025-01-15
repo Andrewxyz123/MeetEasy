@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/booking_page.dart';
+import 'package:frontend/pages/booking_views/manage_booking_status.dart';
 import 'package:frontend/pages/profile_page.dart';
 import 'package:frontend/pages/room_views/room_page.dart';
 import 'pages/login_page.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => const ProfilePage(),
         '/create-booking': (context) => CreateBookingPage(),
         '/create-room': (context) => CreateRoomPage(),
+        '/manage-booking-status': (context) => ManageBookingStatusPage(),
         '/booking-list': (context) => BookingPage(),
         '/dashboard': (context) => DashboardPage( 
           company: dummyCompany,
