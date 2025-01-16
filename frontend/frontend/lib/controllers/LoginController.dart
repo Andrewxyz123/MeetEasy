@@ -41,9 +41,9 @@ class LoginController {
 
       // Create the request body
       final requestBody = jsonEncode({
-        'companyloginid': "tech_admin",
-        'employeeid': "EMP001",
-        'password': "password123"
+        'companyloginid': company_id,
+        'employeeid': employee_id,
+        'password': password
       });
 
       // print('Trying to login with request body: ' + requestBody);
