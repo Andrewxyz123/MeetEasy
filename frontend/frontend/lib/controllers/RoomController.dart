@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/controllers/UserController.dart';
+import 'package:frontend/models/company_branch.dart';
 import 'package:frontend/models/room.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -100,46 +101,58 @@ class RoomController extends GetxController {
   await roomController.getRoomsByUserId(userId);
 }
 
-  Future createRoom({
-    required String? roomNumber,
-    required String? roomType,
-    required String? description,
-    required int? capacity
-  }) async {
-    try {
-      var data = {
-        'roomNumber': roomNumber,
-        'roomType': roomType,
-        'description': description,
-        'capacity': capacity,
-      };
-      
-      print(data);
+Future createRoom({
+  required String? roomNumber,
+  required String? roomType,
+  required String? description,
+  required int? capacity,
+  required CompanyBranch? branch
+}) async {
+  try {
+    // Create the request payload
+    var data = {
+      'roomNumber': roomNumber ?? '',
+      'roomType': roomType ?? '',
+      'description': description ?? '',
+      'capacity': capacity ?? 0, // Server expects int for capacity
+      'branch' : branch,
+      'status': 'available'
+    };
 
-      var response = await http.post(
-        Uri.parse('${roomURL}/createRoom'),
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ${box.read('token')}',
-        },
-        body: data,
+    print('Request Data: $data'); // Debugging print
+
+    // Make the HTTP POST request
+    var response = await http.post(
+      Uri.parse('$roomURL/createRoom'),
+      headers: {
+        'Accept': 'application/json', // Expect JSON response
+        'Content-Type': 'application/json', // Sending JSON data
+        'Authorization': 'Bearer ${box.read('token')}', // Token for auth
+      },
+      body: json.encode(data), // Encode body as JSON
+    );
+
+    if (response.statusCode == 201) {
+      // Successfully created the room
+      print('Response: ${json.decode(response.body)}');
+    } else {
+      // Handle error responses
+      print('Error: ${response.body}');
+      Get.snackbar(
+        'Error',
+        json.decode(response.body)['message'] ?? 'Unknown error occurred',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
       );
-
-      if (response.statusCode == 201) {
-        print(json.decode(response.body));
-      } else {
-        Get.snackbar(
-          'Error',
-          json.decode(response.body)['message'],
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-    } catch (e) {
-      print(e.toString());
     }
+  } catch (e) {
+    // Handle exceptions
+    print('Exception: $e');
   }
+}
+
+
 
 //updateRoomById
   Future updateRoom({

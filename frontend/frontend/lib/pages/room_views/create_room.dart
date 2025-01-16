@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/BookingController.dart';
+import 'package:frontend/controllers/BranchController.dart';
 import 'package:frontend/controllers/RoomController.dart';
+import 'package:frontend/controllers/UserController.dart';
+import 'package:frontend/models/booking.dart';
+import 'package:frontend/models/room.dart';
+import 'package:frontend/models/company_branch.dart'; // Assuming you have this model
 import 'package:get/get.dart';
 
 class CreateRoomPage extends StatefulWidget {
@@ -16,10 +22,31 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   final TextEditingController _capacityController = TextEditingController();
 
   final RoomController _roomController = Get.put(RoomController());
+  final BookingController _bookingController = Get.put(BookingController());
+  final UserController _userController = Get.put(UserController());
+  final Branchcontroller branchcontroller = Get.put(Branchcontroller());
+
+  List<Booking> bookingList = [];
+  List<Room> roomList = [];
+  List<CompanyBranch> companyBranchList = [];
+  CompanyBranch? _selectedBranch;
+
+  // Fetch the company branches
+  Future<void> _fetchCompanyBranches() async {
+    final branches = await branchcontroller.fetchBranchForLoggedInUser(); // Assume this method fetches the branches
+    setState(() {
+      companyBranchList = branches;
+      print(companyBranchList);
+    });
+  }
 
   void _saveRoom() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
+      await _roomController.fetchRoomsForLoggedInUser(); 
+      final bookings = await _bookingController.fetchBookingsForLoggedInUser();
+      final rooms = await _roomController.fetchRoomsForLoggedInUser2();
 
       // Gather room data
       String roomNumber = _roomNumberController.text.trim();
@@ -27,16 +54,15 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
       String description = _descriptionController.text.trim();
       int? capacity = int.tryParse(_capacityController.text.trim());
 
+      print('test');
+
       try {
         await _roomController.createRoom(
           roomNumber: roomNumber,
           roomType: roomType,
           description: description,
           capacity: capacity,
-        );
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Room successfully created!')),
+          branch: _selectedBranch
         );
 
         // Clear the form after successful creation
@@ -50,7 +76,23 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
           SnackBar(content: Text('Error creating room: $e')),
         );
       }
+
+      setState(() {
+        bookingList = bookings;
+        roomList = rooms;
+      });
+
+      Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': _userController.user,
+        'booking-list': bookingList,
+        if (_userController.user?.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
+      });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCompanyBranches(); // Fetch the company branches when the page is initialized
   }
 
   @override
@@ -60,8 +102,8 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Create Booking',
-          style: TextStyle(color: Colors.white), // Set title text color to white
+          'Create Room',
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF4C51BF),
       ),
@@ -72,6 +114,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Room number
               TextFormField(
                 controller: _roomNumberController,
                 decoration: InputDecoration(
@@ -86,6 +129,8 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                 },
               ),
               const SizedBox(height: 25),
+
+              // Room type
               TextFormField(
                 controller: _roomTypeController,
                 decoration: InputDecoration(
@@ -101,6 +146,8 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                 },
               ),
               const SizedBox(height: 25),
+
+              // Description
               TextFormField(
                 controller: _descriptionController,
                 decoration: InputDecoration(
@@ -116,6 +163,8 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                 },
               ),
               const SizedBox(height: 25),
+
+              // Capacity
               TextFormField(
                 controller: _capacityController,
                 decoration: InputDecoration(
@@ -135,6 +184,30 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                 },
               ),
               const SizedBox(height: 25),
+
+              // Dropdown for selecting a company branch
+              DropdownButtonFormField<CompanyBranch>(
+                value: _selectedBranch,
+                decoration: InputDecoration(
+                  labelText: 'Branch',
+                  labelStyle: theme.textTheme.bodyLarge,
+                ),
+                items: companyBranchList.map((branch) {
+                  return DropdownMenuItem<CompanyBranch>(
+                    value: branch,
+                    child: Text(branch.name ?? 'No branch name'),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedBranch = value;
+                  });
+                },
+                validator: (value) => value == null ? 'Please select a branch' : null,
+              ),
+              const SizedBox(height: 25),
+
+              // Create Room Button
               Spacer(),
               SizedBox(
                 width: double.infinity,

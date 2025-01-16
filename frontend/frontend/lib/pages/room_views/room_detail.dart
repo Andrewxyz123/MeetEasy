@@ -23,7 +23,7 @@ class RoomDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Create Booking',
+          'Room Detail',
           style: TextStyle(color: Colors.white), // Set title text color to white
         ),
         backgroundColor: const Color(0xFF4C51BF),

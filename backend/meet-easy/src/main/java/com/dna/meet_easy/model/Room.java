@@ -36,8 +36,8 @@ public class Room {
 
     private Integer capacity;
 
-    @Column(columnDefinition = "jsonb")
-    private String features;
+    // @Column(columnDefinition = "jsonb")
+    // private String features;
 
     private String status;
 
@@ -93,13 +93,13 @@ public class Room {
         this.capacity = capacity;
     }
 
-    public String getFeatures() {
-        return features;
-    }
+    // public String getFeatures() {
+    //     return features;
+    // }
 
-    public void setFeatures(String features) {
-        this.features = features;
-    }
+    // public void setFeatures(String features) {
+    //     this.features = features;
+    // }
 
     public String getStatus() {
         return status;

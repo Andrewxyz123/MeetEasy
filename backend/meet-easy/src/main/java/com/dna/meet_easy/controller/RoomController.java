@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,7 +61,7 @@ public class RoomController {
     }
 
     @Operation(summary = "Delete Room by ID", operationId = "deleteRoomById")
-    @DeleteMapping("/{roomId}")
+    @DeleteMapping("/deleteRoom/{roomId}")
     public ResponseEntity<Void> deleteRoomById(@PathVariable Long roomId) {
         if (roomRepository.existsById(roomId)) {
             roomRepository.deleteById(roomId);
@@ -77,7 +78,6 @@ public class RoomController {
                 .map(room -> {
                     room.setCapacity(updatedRoom.getCapacity());
                     room.setDescription(updatedRoom.getDescription());
-                    room.setFeatures(updatedRoom.getFeatures());
                     room.setRoomNumber(updatedRoom.getRoomNumber());
                     room.setRoomType(updatedRoom.getRoomType());
                     room.setStatus(updatedRoom.getStatus());
@@ -85,4 +85,30 @@ public class RoomController {
                 })
                 .orElse(ResponseEntity.notFound().build()); // 404 Not Found
     }
+
+    @Operation(summary = "Create a new room", operationId = "createRoom")
+    @PostMapping("/createRoom")
+    public ResponseEntity<?> createRoom(@RequestBody Room roomRequest) {
+        try {
+            if (roomRequest.getCapacity() == null) {
+                return ResponseEntity.badRequest().body("Capacity are required");
+            }
+
+            if (roomRequest.getRoomNumber() == null || roomRequest.getRoomNumber().isEmpty()) {
+                return ResponseEntity.badRequest().body("Room name is required");
+            }
+            // Ensure end time is after start time
+            if (roomRequest.getRoomType() == null) {
+                return ResponseEntity.badRequest().body("Room type is required");
+            }
+
+            // Save the booking
+            Room savedRoom = roomRepository.save(roomRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating room: " + e.getMessage());
+        }
+
+            }
 }
