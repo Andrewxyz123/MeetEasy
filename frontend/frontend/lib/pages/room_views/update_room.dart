@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/controllers/RoomController.dart';
+import 'package:frontend/controllers/UserController.dart';
+import 'package:frontend/models/booking.dart';
+import 'package:frontend/models/room.dart';
 import 'package:get/get.dart';
 
 class UpdateRoomPage extends StatefulWidget {
@@ -30,6 +34,11 @@ class _UpdateRoomPageState extends State<UpdateRoomPage> {
   final TextEditingController _capacityController = TextEditingController();
 
   final RoomController _roomController = Get.put(RoomController());
+  final BookingController _bookingController = BookingController();
+  final UserController _userController = Get.put(UserController());
+
+    List<Booking> bookingList = [];
+    List<Room> roomList = [];
 
   @override
   void initState() {
@@ -74,6 +83,27 @@ class _UpdateRoomPageState extends State<UpdateRoomPage> {
         );
 
         Navigator.pop(context); // Navigate back after saving
+
+        await _roomController.fetchRoomsForLoggedInUser();
+        final bookings = await _bookingController.fetchBookingsForLoggedInUser();
+        final rooms = await _roomController.fetchRoomsForLoggedInUser2();
+
+        // Mock validation for time slot availability
+        setState(() {
+          bookingList = bookings;
+          roomList = rooms;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Booking updated successfully!')),
+        );
+
+        Navigator.pop(context);
+
+        Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': _userController.user,
+        'booking-list': bookingList,
+        if (_userController.user?.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
+      });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error updating room: $e')),

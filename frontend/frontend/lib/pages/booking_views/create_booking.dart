@@ -81,9 +81,6 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
   
   void _saveBooking() async{
     // Perform the async operation
-    await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
-    final bookings = await _BookingController.fetchBookingsForLoggedInUser();
-    final rooms = await _RoomController.fetchRoomsForLoggedInUser2();
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -107,6 +104,10 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
         print('error in creating Booking');
       }
 
+      await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
+      final bookings = await _BookingController.fetchBookingsForLoggedInUser();
+      final rooms = await _RoomController.fetchRoomsForLoggedInUser2();
+
       // Mock validation for time slot availability
       setState(() {
         bookingList = bookings;
@@ -123,7 +124,6 @@ class _CreateBookingPageState extends State<CreateBookingPage> {
         );
       }
 
-      Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': _userController.user,
         'booking-list': bookingList,
         if (_userController.user?.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,

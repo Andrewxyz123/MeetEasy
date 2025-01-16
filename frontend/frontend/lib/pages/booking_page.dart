@@ -219,10 +219,12 @@ Widget build(BuildContext context) {
 
                                                 if (confirmed) {
                                                   _BookingController.deleteBooking(booking.id!);
+                          
+                                                  // Perform deletion action here
+
                                                   await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
                                                   final bookings = await _BookingController.fetchBookingsForLoggedInUser();
                                                   final rooms = await _RoomController.fetchRoomsForLoggedInUser2();
-                                                  // Perform deletion action here
 
                                                   setState(() {
                                                     bookingList = bookings;

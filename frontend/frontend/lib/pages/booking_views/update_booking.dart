@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/controllers/BookingController.dart';
 import 'package:frontend/controllers/LoginController.dart';
 import 'package:frontend/controllers/RoomController.dart';
+import 'package:frontend/controllers/UserController.dart';
+import 'package:frontend/models/booking.dart';
 import 'package:frontend/models/room.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -27,12 +30,16 @@ class UpdateBookingPage extends StatefulWidget {
 class _UpdateBookingPageState extends State<UpdateBookingPage> {
   final BookingController _bookingController = BookingController();
   final RoomController _roomController = LoginController().roomController;
+  final UserController _userController = Get.put(UserController());
 
   List<Room?> rooms = [];
   Room? selectedRoom;
   DateTime? selectedDate;
   TimeOfDay? startTime;
   TimeOfDay? endTime;
+
+  List<Booking> bookingList = [];
+  List<Room> roomList = [];
 
   @override
   void initState() {
@@ -115,11 +122,29 @@ class _UpdateBookingPageState extends State<UpdateBookingPage> {
           selectedRoom: selectedRoom!,
         );
 
+        await _roomController.fetchRoomsForLoggedInUser();
+        final bookings = await _bookingController.fetchBookingsForLoggedInUser();
+        final rooms = await _roomController.fetchRoomsForLoggedInUser2();
+
+        // Mock validation for time slot availability
+        setState(() {
+          bookingList = bookings;
+          roomList = rooms;
+        });
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Booking updated successfully!')),
         );
 
         Navigator.pop(context);
+
+        Navigator.pushReplacementNamed(context, '/dashboard', arguments: {'user': _userController.user,
+        'booking-list': bookingList,
+        if (_userController.user?.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
+      });
+
+
+
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to update booking: $e')),

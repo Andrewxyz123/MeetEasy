@@ -44,12 +44,12 @@ class _ManageBookingStatusPageState extends State<ManageBookingStatusPage> {
 
   Future<void> updateBookingStatus(int? bookingId, String? newStatus) async {
 
-    await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
-    final bookings = await _bookingController.fetchBookingsForLoggedInUser();
-    final rooms = await _RoomController.fetchRoomsForLoggedInUser2();
-
     try {
       await _bookingController.updateBookingStatus(bookingId: bookingId, status: newStatus);
+
+      await _RoomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
+      final bookings = await _bookingController.fetchBookingsForLoggedInUser();
+      final rooms = await _RoomController.fetchRoomsForLoggedInUser2();
 
       setState(() {
         bookingList = bookings;

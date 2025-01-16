@@ -44,10 +44,6 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      await _roomController.fetchRoomsForLoggedInUser(); 
-      final bookings = await _bookingController.fetchBookingsForLoggedInUser();
-      final rooms = await _roomController.fetchRoomsForLoggedInUser2();
-
       // Gather room data
       String roomNumber = _roomNumberController.text.trim();
       String roomType = _roomTypeController.text.trim();
@@ -76,6 +72,10 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
           SnackBar(content: Text('Error creating room: $e')),
         );
       }
+
+      await _roomController.fetchRoomsForLoggedInUser(); 
+      final bookings = await _bookingController.fetchBookingsForLoggedInUser();
+      final rooms = await _roomController.fetchRoomsForLoggedInUser2();
 
       setState(() {
         bookingList = bookings;
