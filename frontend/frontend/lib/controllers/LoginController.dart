@@ -68,9 +68,9 @@ class LoginController {
         // print('Booking list: ' + bookingList.toString());
         List<Room> roomList = [];
         if (loggedInUser.role?.name?.toLowerCase() == 'room_manager') {
-        roomList = await roomController.fetchRoomsForLoggedInUser2();
-        // print('Rooms fetched successfully');
-      }
+          roomList = await roomController.fetchRoomsForLoggedInUser2();
+          // print('Rooms fetched successfully');
+        }
 
         // Login successful
         ScaffoldMessenger.of(context).showSnackBar(

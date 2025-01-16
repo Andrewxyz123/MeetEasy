@@ -40,19 +40,25 @@ class BookingController extends GetxController {
     }
   }
 
-  // Fetch bookings by user ID
-  Future<List<Booking>> getBookingsByUserId(int userId) async {
+
+  Future<List<Booking>> getBookingsByCompanyId(int company_id) async {
+    // Construct the URL with the query parameter
+    String url = '$bookingURL/company?companyId=$company_id';
+    
+    // Print the request URL
+    print("Requesting bookings from URL: $url");
+
     try {
       var response = await http.get(
-        Uri.parse('$bookingURL/user/$userId'),
+        Uri.parse(url),
         headers: {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
         },
       );
 
-      print("Finding bookings for user $userId...");
-      print("Response body: ${response.body}");
+      print("Finding bookings for user on company $company_id...");
+      print("Response body for fetching company id: ${response.body}");
 
       if (response.statusCode == 200) {
         final content = json.decode(response.body);
@@ -73,10 +79,48 @@ class BookingController extends GetxController {
     }
   }
 
+  
+  // Fetch bookings by user ID
+  Future<List<Booking>> getBookingsByUserId(int userId) async {
+    try {
+
+      var response = await http.get(
+        Uri.parse('$bookingURL/user/$userId'),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${box.read('token')}',
+        },
+      );
+
+      print("Finding bookings for user $userId...");
+      print("Response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final content = json.decode(response.body);
+        if (content is List) {
+          print("DONEEEEEEEEEE");
+          return content.map((item) => Booking.fromJson(item)).toList();
+        } else {
+          // Handle the case where the response is not a list
+          print("Expected a list but got: $content");
+          return [];
+        }
+      } else {
+        print(json.decode(response.body));
+        return [];
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return [];
+    }
+  }
+
   // Fetch bookings for the logged-in user
   Future<List<Booking>> fetchBookingsForLoggedInUser() async {
     final userController = Get.find<UserController>();
     final userId = userController.user?.id;
+    final userRole = userController.user?.role?.name;
+    final companyId = userController.user?.company?.id;
 
     if (userId == null) {
       Get.snackbar(
@@ -87,6 +131,10 @@ class BookingController extends GetxController {
         colorText: Colors.white,
       );
       return [];
+    }
+
+    if(userRole == 'room_manager'){
+      return await getBookingsByCompanyId(companyId!);
     }
 
     return await getBookingsByUserId(userId);

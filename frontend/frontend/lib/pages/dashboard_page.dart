@@ -337,8 +337,18 @@ class BookingCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        title: Text('Room ${booking.room?.roomNumber ?? "Unknown Room"}'),
-        subtitle: Text('$formattedStartTime - $formattedEndTime'),
+        title: Text('Booking by ${booking.user?.fullname ?? "Unknown User"}'),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Location: ${booking.room?.companyBranch?.name ?? "Unknown Location"}',
+              style: TextStyle(fontSize: 10),
+            ),
+            Text('Room: ${booking.room?.roomNumber ?? "Unknown Room"}'),
+            Text('Duration: $formattedStartTime - $formattedEndTime'),
+          ],
+        ),
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(

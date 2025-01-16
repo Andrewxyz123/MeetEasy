@@ -26,6 +26,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByStatusInAndUserId(List<String> of, Long userId);
 
+    List<Booking> findByRoom_Branch_Id(Long branchId);
+
+    List<Booking> findByUser_Company_Id(Long companyId);
+
     // @Query("SELECT b FROM Booking b WHERE b.user.id = :userId AND b.startDate > :currentDate")
     // List<Booking> findFutureBookingsByUserId(@Param("userId") Long userId, @Param("currentDate") LocalDateTime currentDate);
 }

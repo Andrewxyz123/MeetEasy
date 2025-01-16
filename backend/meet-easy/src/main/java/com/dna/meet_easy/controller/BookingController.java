@@ -172,4 +172,13 @@ public class BookingController {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
     }
+
+    @Operation(summary = "Get Bookings by Company ID", operationId = "getBookingsByCompanyId")
+    @GetMapping("/company")
+    public ResponseEntity<List<Booking>> getBookingsByCompanyId(
+            @RequestParam Long companyId) {
+        
+        List<Booking> bookings = bookingRepository.findByUser_Company_Id(companyId);
+        return ResponseEntity.ok(bookings); // 200 OK with the list of bookings
+    }
 }
