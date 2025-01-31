@@ -45,15 +45,12 @@ public class BookingController {
     //     if (user == null) {
     //         return ResponseEntity.notFound().build(); // 404 Not Found if user does not exist
     //     }
-
     //     List<Booking> bookings = bookingRepository.findByUserId(userId);
     //     List<Room> bookedRooms = bookings.stream()
     //                                       .map(Booking::getRoom) // Assuming Booking has a getRoom() method
     //                                       .collect(Collectors.toList());
-
     //     return ResponseEntity.ok(bookedRooms); // 200 OK with the list of booked rooms
     // }
-
     @Operation(summary = "Get Bookings by UserId", operationId = "getBookingsByUserId")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Booking>> getBookingsByUserId(@PathVariable Long userId) {
@@ -78,7 +75,7 @@ public class BookingController {
             if (bookingRequest.getStartTime() == null || bookingRequest.getEndTime() == null) {
                 return ResponseEntity.badRequest().body("Start time and end time are required");
             }
-    
+
             if (bookingRequest.getRoom() == null || bookingRequest.getRoom().getRoomNumber() == null || bookingRequest.getRoom().getRoomNumber().isEmpty()) {
                 return ResponseEntity.badRequest().body("Room name is required");
             }
@@ -86,11 +83,11 @@ public class BookingController {
             if (bookingRequest.getEndTime().isBefore(bookingRequest.getStartTime())) {
                 return ResponseEntity.badRequest().body("End time must be after start time");
             }
-    
+
             // Save the booking
             Booking savedBooking = bookingRepository.save(bookingRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedBooking);
-    
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating booking: " + e.getMessage());
         }
@@ -125,16 +122,17 @@ public class BookingController {
     }
 
     @Operation(summary = "Update Booking by ID", operationId = "updateBookingById")
-    @PutMapping("/{bookingId}")
+    @PutMapping("/updateBooking/{bookingId}")
     public ResponseEntity<Booking> updateBookingById(@PathVariable Long bookingId, @RequestBody Booking updatedBooking) {
-        Booking booking = bookingRepository.findById(bookingId).orElse(null);
-        if (booking != null) {
-            booking.setStartTime(updatedBooking.getStartTime());
-            booking.setEndTime(updatedBooking.getEndTime());
-            return ResponseEntity.ok(bookingRepository.save(booking));
-        } else {
-            return ResponseEntity.notFound().build(); // 404 Not Found
-        }
+        return bookingRepository.findById(bookingId)
+                .map(booking -> {
+                    booking.setStartTime(updatedBooking.getStartTime());
+                    booking.setEndTime(updatedBooking.getEndTime());
+                    booking.setRoom(updatedBooking.getRoom());
+                    // Set other fields if needed
+                    return ResponseEntity.ok(bookingRepository.save(booking));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // Get unapproved bookings for specific user
@@ -177,7 +175,7 @@ public class BookingController {
     @GetMapping("/company")
     public ResponseEntity<List<Booking>> getBookingsByCompanyId(
             @RequestParam Long companyId) {
-        
+
         List<Booking> bookings = bookingRepository.findByUser_Company_Id(companyId);
         return ResponseEntity.ok(bookings); // 200 OK with the list of bookings
     }

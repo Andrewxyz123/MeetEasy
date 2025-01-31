@@ -57,8 +57,8 @@ class BookingController extends GetxController {
         },
       );
 
-      print("Finding bookings for user on company $company_id...");
-      print("Response body for fetching company id: ${response.body}");
+      // print("Finding bookings for user on company $company_id...");
+      // print("Response body for fetching company id: ${response.body}");
 
       if (response.statusCode == 200) {
         final content = json.decode(response.body);
@@ -92,8 +92,8 @@ class BookingController extends GetxController {
         },
       );
 
-      print("Finding bookings for user $userId...");
-      print("Response body: ${response.body}");
+      // print("Finding bookings for user $userId...");
+      // print("Response body: ${response.body}");
 
       if (response.statusCode == 200) {
         final content = json.decode(response.body);
@@ -156,6 +156,7 @@ class BookingController extends GetxController {
         endTime: end_time,
         status: 'requested'
       );
+
       final requestBody = jsonEncode(booking.toJson());
 
       print("CREATE BOOKING REQUEST BODY: "+requestBody);
@@ -170,7 +171,7 @@ class BookingController extends GetxController {
         body: requestBody,
       );
       
-      print("CREAT BOOKING RESPONSE BODY: "+response.body);
+      // print("CREAT BOOKING RESPONSE BODY: "+response.body);
 
       if (response.statusCode == 201) {
         return true;
@@ -198,22 +199,46 @@ class BookingController extends GetxController {
     required DateTime? endDateTime,
   }) async {
     try {
-      var data = {
-        'room': selectedRoom,
-        'start_time': startDateTime.toString(),
-        'end_time': endDateTime.toString(),
-      };
+      // var data = {
+      //   'room': json.encode(selectedRoom),
+      //   'startTime': startDateTime.toString(),
+      //   'endTime': endDateTime.toString(),
+      // };
+
+      // print(data);
+
+      final Booking booking = Booking(
+        room: selectedRoom,
+        startTime: startDateTime,
+        endTime: endDateTime
+      );
+      
+      final bookingData = jsonEncode(booking.toJson());
+
+      print(bookingData);
 
       var response = await http.put(
         Uri.parse('$bookingURL/updateBooking/$bookingId'),
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
         },
-        body: json.encode(data),
+        body: bookingData,
       );
 
-      return response.statusCode == 200;
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        Get.snackbar(
+          'Error',
+          json.decode(response.body)['message'],
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return false;
+      }
     } catch (e) {
       print('Error updating booking: $e');
       return false;

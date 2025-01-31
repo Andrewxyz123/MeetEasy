@@ -172,9 +172,10 @@ Future createRoom({
       };
 
       var response = await http.post(
-        Uri.parse('${roomURL}/updateStoryRoom/$roomId'),
+        Uri.parse('${roomURL}/updateRoom/$roomId'),
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
         },
         body: data,
@@ -235,8 +236,8 @@ Future createRoom({
         },
       );
 
-      print("Finding rooms for user $userId...");
-      print("Response body: ${response.body}");
+      // print("Finding rooms for user $userId...");
+      // print("Response body: ${response.body}");
 
       if (response.statusCode == 200) {
         final content = json.decode(response.body);

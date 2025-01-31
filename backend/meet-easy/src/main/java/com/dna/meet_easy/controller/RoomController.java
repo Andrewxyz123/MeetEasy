@@ -72,7 +72,7 @@ public class RoomController {
     }
 
     @Operation(summary = "Update Room by ID", operationId = "updateRoomById")
-    @PutMapping("/{roomId}")
+    @PutMapping("/updateRoom/{roomId}")
     public ResponseEntity<Room> updateRoomById(@PathVariable Long roomId, @RequestBody Room updatedRoom) {
         return roomRepository.findById(roomId)
                 .map(room -> {

@@ -79,8 +79,8 @@ class LoginController {
 
         // print('Fetching rooms for logged-in user...');
         await roomController.fetchRoomsForLoggedInUser(); // Assuming this is an async function
-        print('Rooms fetched successfully');
-        print(roomController.userRooms);
+        // print('Rooms fetched successfully');
+        // print(roomController.userRooms);
 
         // Navigate to the next page
         Navigator.pushReplacementNamed(context, '/dashboard', arguments: 
