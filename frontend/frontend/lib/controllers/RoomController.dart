@@ -163,26 +163,43 @@ Future createRoom({
     required int? capacity,
   }) async {
     try {
-      var data = {
-        'roomId': roomId,
-        'roomNumber': roomNumber,
-        'roomType': roomType,
-        'description': description,
-        'capacity': capacity,
-      };
+      // var data = {
+      //   'roomId': roomId,
+      //   'roomNumber': roomNumber,
+      //   'roomType': roomType,
+      //   'description': description,
+      //   'capacity': capacity,
+      // };
 
-      var response = await http.post(
+      final Room room = Room(
+        id: roomId,
+        roomNumber: roomNumber,
+        roomType: roomType,
+        description: description,
+        capacity: capacity,
+      );
+
+      final roomData = jsonEncode(room.toJson());
+
+      print(roomData);
+
+      print('test1');
+
+      var response = await http.put(
         Uri.parse('${roomURL}/updateRoom/$roomId'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${box.read('token')}',
         },
-        body: data,
+        body: roomData,
       );
 
-      if (response.statusCode == 201) {
-        onInit();
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        // onInit();
+        print('success');
       } else {
         Get.snackbar(
           'Error',
