@@ -6,19 +6,15 @@ import 'package:frontend/models/company.dart';
 import 'package:intl/intl.dart';
 // import 'package:get/get.dart';
 class DashboardPage extends StatelessWidget {
-  final Company company;
-  final String companyBranch;
-
   const DashboardPage({
     super.key,
-    required this.company,
-    required this.companyBranch,
   });
 
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final User user = arguments['user'];
+
     final List<Booking> bookingList = arguments['booking-list'];
     final List<Room>? roomList = arguments['room-list'];
     final String? roleName = user.role?.name;
@@ -92,7 +88,7 @@ class DashboardPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                company.name ?? 'Company Name',
+                                user.company?.name ?? 'Company Name',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.black87,
@@ -170,7 +166,7 @@ class DashboardPage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  companyBranch,
+                                  user.company?.name ?? 'Branch Name',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

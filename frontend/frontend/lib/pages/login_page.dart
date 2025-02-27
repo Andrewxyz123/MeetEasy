@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:frontend/controllers/BookingController.dart';
-// import 'package:frontend/controllers/UserController.dart';
-// import 'package:get/get.dart';
+import 'package:frontend/controllers/BookingController.dart';
 import '../controllers/loginController.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class LoginPage extends StatelessWidget {
   // const LoginPage({super.key});
@@ -11,7 +13,67 @@ class LoginPage extends StatelessWidget {
   final employeeIdController = TextEditingController();
   final passwordController = TextEditingController();
   final LoginController loginController = LoginController();
-  // final UserController _userController = Get.put(UserController());
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  
+
+  void _requestNotificationPermission() async {
+    if (await Permission.notification.isDenied) {
+      await Permission.notification.request();
+    }
+    if (await Permission.scheduleExactAlarm.isDenied) {
+      openAppSettings(); // Direct user to settings
+    }
+  }
+
+  void _initializeNotifications() async {
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: null);
+    
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  
+
+
+
+  void _showNotification() async {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
+    _requestNotificationPermission();
+    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+      'your_channel_name',
+      'your_channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+
+    var platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: const DarwinNotificationDetails(), // Prevents potential issues
+    );
+
+    // await flutterLocalNotificationsPlugin.zonedSchedule(
+    //       0,
+    //   'scheduled title',
+    //   'scheduled body',
+    //   tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)),
+    //   platformChannelSpecifics,
+    //   uiLocalNotificationDateInterpretation:UILocalNotificationDateInterpretation.absoluteTime, 
+    //   androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    // );
+    
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Booking Approved!',
+      'Your booking for Room 101 at 13:00 has been approved.',
+      platformChannelSpecifics,
+    );
+
+    print('Notification triggered');
+    print(tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +158,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   SizedBox(width: 8.0),
                   TextButton(
-                    onPressed: () {
-                      // Handle contact support
-                    },
+                    onPressed: _showNotification,
                     child: Text(
                       'Contact Support',
                       style: theme.textTheme.bodyMedium?.copyWith(

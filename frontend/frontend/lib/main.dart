@@ -61,10 +61,7 @@ class MyApp extends StatelessWidget {
         '/create-room': (context) => CreateRoomPage(),
         '/manage-booking-status': (context) => ManageBookingStatusPage(),
         '/booking-list': (context) => BookingPage(),
-        '/dashboard': (context) => DashboardPage( 
-          company: dummyCompany,
-          companyBranch: dummyBranch,
-        ),
+        '/dashboard': (context) => DashboardPage(),
         '/room-list': (context) => RoomPage(),
       },
     );

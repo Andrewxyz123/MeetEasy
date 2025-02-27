@@ -128,7 +128,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
 
               // Room type
               TextFormField(
@@ -145,7 +145,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
 
               // Description
               TextFormField(
@@ -154,7 +154,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                   labelText: 'Description',
                   labelStyle: theme.textTheme.bodyLarge,
                 ),
-                maxLines: 3,
+                maxLines: 1,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Please enter a description';
@@ -162,7 +162,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
 
               // Capacity
               TextFormField(
@@ -183,7 +183,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
 
               // Dropdown for selecting a company branch
               DropdownButtonFormField<CompanyBranch>(
@@ -205,7 +205,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                 },
                 validator: (value) => value == null ? 'Please select a branch' : null,
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
 
               // Create Room Button
               Spacer(),

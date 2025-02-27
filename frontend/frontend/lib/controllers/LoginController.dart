@@ -87,6 +87,7 @@ class LoginController {
         {'user': loggedInUser,
           'booking-list': bookingList,
           if (loggedInUser.role?.name?.toLowerCase() == 'room_manager') 'room-list': roomList,
+          
         });
       } else {
         // Login failed
